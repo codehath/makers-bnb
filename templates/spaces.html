@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Spaces</title>
+        <meta charset="utf-8" />
+    </head>
+    <body>
+        <h1>Spaces Page</h1>
+
+        <a href="/add-listing">
+            <button>Make a Listing</button>
+        </a>
+
+        <form method="post" action="/spaces">
+            <label for="avail-from">Available from:</label><br>
+            <input type="date" id="avail-from" name="avail-from"><br>
+            <label for="avail-to">Available to:</label><br>
+            <input type="date" id="avail-to" name="avail-to">
+            <input type="submit" value="Search">
+        </form>
+
+        <ul>
+            {% for space in spaces %}
+            <div>
+                <h2><a href="/spaces/{{space.id}}">{{space.name}}</a></h2>
+                <p>{{space.description}}</p>
+                <p>£{{space.price}} per night</p>
+            </div>
+            {% endfor %}
+        </ul>
+    </body>
+</html>
+
+
