@@ -1,6 +1,12 @@
 import json
+import os
 
-with open("credentials.json") as f:
+# Had to put this in to avoid the tests breaking
+path = os.getcwd()
+index = path.index("bnb")
+path = path[: index + 3] + "/credentials.json"
+
+with open(path) as f:
     credentials = json.load(f)
 
 user = credentials["user"]
