@@ -23,16 +23,8 @@ db = PostgresqlDatabase(
 # Connect to the database
 db.connect()
 
-
-db.drop_tables([Person])
-db.drop_tables([Space])
-db.drop_tables([Booking])
-db.drop_tables([Availability])
-
-db.create_tables([Person])
-db.create_tables([Space])
-db.create_tables([Booking])
-db.create_tables([Availability])
+db.drop_tables([Person, Space, Booking, Availability])
+db.create_tables([Person, Space, Booking, Availability])
 
 new_person = Person.create(name="John Doe", email="john", password="password")
 new_person2 = Person.create(name="Bruce Wayne", email="bruce", password="password")
