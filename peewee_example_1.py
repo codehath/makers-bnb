@@ -1,7 +1,7 @@
 from peewee import Model, PostgresqlDatabase, CharField, IntegerField
 
 # Replace the following with your PostgreSQL database connection details
-db = PostgresqlDatabase("test", user="farhath", password="", host="localhost")
+db = PostgresqlDatabase("test", user="", password="", host="localhost")
 
 
 class BaseModel(Model):

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1> Requests</h1>
+    <article>
+        <h2>Requests I have made</h2>
+        {% for booking in user_bookings %}
+            <p>{{ booking.id}} - {{ booking.space_id }}: {{ booking.start_date }}: {{ booking.end_date }}: {{ booking.approved }}: {{booking.user_id}} {{ booking.response }}</p>
+        {% endfor %}
+    </article>
+    <article>
+        <h2>Requests I have recieved</h2>
+        {% for booking in space_bookings %}
+            <p>{{ booking.start_date }} - {{ booking.end_date }}: {{ booking.space.name }}</p>
+        {% endfor %}
+    </article>
+</body>
+</html>

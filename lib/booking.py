@@ -13,6 +13,7 @@ class Booking(Model):
     end_date = DateField()
     approved = BooleanField(default=False)
     user_id = ForeignKeyField(Person)
+    response = BooleanField(default=False)
 
     class Meta:
         database = db
