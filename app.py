@@ -50,7 +50,11 @@ def post_signup():
     else:
         Person.create(name=name, email=email, password=password)
         return redirect("/login")
-    
+    #Check if Email Already Exists.
+    # Search emails in DB.
+    # If Email already exists..
+    # return f"Email already exists, enter alternative"
+    # return redirect("/signup")
 
 
 #LOGIN ROUTES
