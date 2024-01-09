@@ -10,6 +10,8 @@ flask = "*"
 pytest-playwright = "*"
 pytest-xprocess = "*"
 py = "*"
+peewee = "*"
+psycopg2-binary = "*"
 
 [dev-packages]
 autopep8 = "*"
