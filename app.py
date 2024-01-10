@@ -53,7 +53,7 @@ def submit_a_space():
     
 @app.route("/list-a-space", methods=["GET"])
 def get_list_a_space():
-    return render_template("list_a_space.html")
+    return render_template("list_page.html")
 
 @app.route("/success", methods=["GET"])
 def get_success():
@@ -64,8 +64,7 @@ def get_success():
 def show_requests():
     user_id = 1 
     user_bookings = Booking.select().where(Booking.user_id == user_id)
-    return render_template("dashboard.html", user_bookings=user_bookings,  
-    space_requests = Space.select().where(Space.user_id == user_id)
+    space_requests = Booking.select().join(Space, on=(Booking.space_id == Space.id)).where(Space.user_id == user_id).order_by(Booking.id).limit(300)
     return render_template("dashboard.html", user_bookings=user_bookings, space_requests=space_requests)
 
 @app.route("/booking_details/<int:booking_id>", methods=['GET'])
@@ -77,9 +76,9 @@ def booking_details(booking_id):
     else:
         return "Booking not Found"
 
-@app.route("/approval-page", methods=["GET"])
-def get_approval_page():
-    return render_template("approval_page.html")
+@app.route("/approval_page/<int:booking_id>", methods=["GET"])
+def approval_page(booking_id):
+    return render_template("approval_page.html" , booking_id=booking_id )
 
 # @app.route("/confirm-a-space", methods=["POST"])
 # def approve_a_space():

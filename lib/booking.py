@@ -8,7 +8,7 @@ db = PostgresqlDatabase(db_name, user=user, password=password, host=host)
 
 class Booking(Model):
     id = AutoField()
-    space_id = ForeignKeyField(Space)
+    space_id = ForeignKeyField(Space, backref="bookings")
     start_date = DateField()
     end_date = DateField()
     approved = BooleanField(default=False)
