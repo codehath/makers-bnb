@@ -44,8 +44,7 @@ def submit_a_space():
         price = request.form['price']
         start_date = request.form['start_date']
         end_date = request.form['end_date']
-        user_id = request.form['user_id']
-        new_space = Space.create(name=name, description=description, price=price, user_id=user_id)
+        new_space = Space.create(name=name, description=description, price=price, user_id=1)
         Availability.create(start_date=start_date, end_date=end_date, space_id=new_space.id)
         return redirect('/success')
 
@@ -61,13 +60,22 @@ def get_success():
     return render_template("success_page.html")
 
 
-@app.route("/requests-page", methods=["GET"])
+@app.route("/dashboard", methods=["GET"])
 def show_requests():
-    # Assuming you have a User model and Booking model
-    user_id = 1 # Replace with the actual user ID (you might get it from the current session)
-    user_bookings = Booking.select().where(Booking.user_id == 1)
-    space_bookings = Space.select().where(Space.user_id == user_id)
-    return render_template("requests_page.html", user_bookings=user_bookings)
+    user_id = 1 
+    user_bookings = Booking.select().where(Booking.user_id == user_id)
+    return render_template("dashboard.html", user_bookings=user_bookings,  
+    space_requests = Space.select().where(Space.user_id == user_id)
+    return render_template("dashboard.html", user_bookings=user_bookings, space_requests=space_requests)
+
+@app.route("/booking_details/<int:booking_id>", methods=['GET'])
+def booking_details(booking_id):
+    booking = Booking.select().join(Space).where(Booking.id == booking_id)
+    print(booking)
+    if booking:
+        return render_template("booking_details.html", booking=booking)
+    else:
+        return "Booking not Found"
 
 @app.route("/approval-page", methods=["GET"])
 def get_approval_page():
@@ -81,26 +89,13 @@ def get_approval_page():
 #         Booking.update(approved=True, response=True)
 
 
+
+# rejects a booking made on our space 
 @app.route("/reject-a-space", methods=["POST"])
 def refuse_a_space():
     if request.method == "POST":
         Booking.update(response = True)
         
-
-
-        
-
-
-# when the approved button is pressed
-# finds the correct spaceID and the booking ID
-# match start date and end date for the booking with the userID
-# change approved and response to true 
-# 
-
-
-# book = Books.get(Books.id == 1)
-# book.author = book.author.upper()
-# book.save()
 
 
     

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1> Requests</h1>
+    <article id="requests_made">
+        <h2>Requests I have made</h2>
+
+        {% for booking in user_bookings %}
+        <a href="{{ url_for('booking_details', booking_id=booking.id) }}">
+            <button>
+                <p>
+                    {{ booking.id}} - {{ booking.space_id }}: {{ booking.start_date }}: {{ booking.end_date }}: {{
+                    booking.approved }}: {{booking.user_id}} {{ booking.response }}</p>
+            </button>
+        </a>
+        <br>
+        {% endfor %}
+    </article>
+    <article id="requests_recieved">
+        <h2>Requests I have recieved</h2>
+
+        {% for booking in space_requests %}
+        <p>Booking ID: {{ booking.id }}
+        Space ID: {{ space.ID }}
+        Space name: {{ space.name }}
+        booking start date ID: {{ booking.start_date }}
+        booking end date: {{ booking.end_date }}
+        Price per night{{space.price}}
+        </p>
+
+        
+        
+        {% endfor %}
+    </article>
+</body>
+
+</html>

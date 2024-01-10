@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Details</title>
+</head>
+<body>
+    {% if booking.space %}
+    <p>ID: {{ booking.id }}</p>
+    <p>Space Name: {{ booking.space.name }}</p>
+    <p>Space Description: {{ booking.space.description }}</p>
+    <p>Space Price: {{ booking.space.price }}</p>
+    <p>Start Date: {{ booking.start_date }}</p>
+    <p>End Date: {{ booking.end_date }}</p>
+    <p>Approved: {{ booking.approved }}</p>
+    <p>User ID: {{ booking.user_id }}</p>
+    <p>Response: {{ booking.response }}</p>
+    {% else %}
+        <p>No associated space found for this booking.</p>
+    {% endif %}
+</body>
+</html>
+
+</body>
+</html>
