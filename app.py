@@ -7,6 +7,7 @@ from lib.person import *
 from lib.availability import *
 from lib.booking import *
 from lib.space import *
+from peewee import DoesNotExist
 
 
 # Create a new Flask app
@@ -45,26 +46,33 @@ def post_signup():
     email = request.form['email']
     password = request.form['password']
     if password != request.form['confirm_password']:
-        return f"Passwords do not match. Please try again." #Add Navigation Back Btn.
+        return f"Passwords do not match. Please try again."
+    #Error - Parse in, Useful for Whole Application
         return redirect("/signup") 
     else:
         Person.create(name=name, email=email, password=password)
         return redirect("/login")
-    #Check if Email Already Exists.
-    # Search emails in DB.
-    # If Email already exists..
-    # return f"Email already exists, enter alternative"
-    # return redirect("/signup")
-
 
 #LOGIN ROUTES
 @app.route("/login", methods=["GET"])
 def get_login():
     return render_template("login.html")
 
+@app.route("/login", methods=["POST"])
+def post_login():
+    email = request.form['email']
+    password = request.form['password']
 
- 
-
+    try:
+        person_registered = Person.select().where(Person.email == email).first()
+        print(f"person registered: {person_registered} ")
+        if person_registered and person_registered.password == password: 
+            return "Logged in Yay"
+        else: 
+            return 'Invalid Password'
+    except DoesNotExist:
+            return 'User doesnt exist'
+        
 # These lines start the server if you run this file directly
 # They also start the server configured to use the test database
 # if started in test mode.
