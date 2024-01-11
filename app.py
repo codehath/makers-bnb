@@ -1,6 +1,7 @@
 import os, datetime
-from flask import Flask, request, render_template, redirect
+from flask import Flask, request, render_template, redirect, flash
 from lib.database_connection import get_flask_database_connection
+
 
 from creds import *
 from lib.person import *
@@ -67,7 +68,7 @@ def get_success():
 
 @app.route("/dashboard", methods=["GET"])
 def get_dashboard():
-    user_id = 1
+    user_id = 2
 
     # Creates a list of dictionaries for bookings with booking details
     bookings = Booking.select().where(Booking.user_id == user_id)
@@ -105,18 +106,19 @@ def booking(booking_id):
 #
 @app.route("/approval/<int:booking_id>", methods=["GET"])
 def approval(booking_id):
-    user_id = 1 
-    requests = Booking.select().join(Space).where(Space.user_id == user_id)
-    requests_dicts = [request.__dict__["__data__"] for request in requests]
+    user_id = 2
+    booking = Booking.get_or_none((Booking.id == booking_id) & (Booking.user_id == user_id))
 
-    for request in requests_dicts:
-        person = Space.select().where(Space.user_id == request["user_id"]).first()
-        if person != None:
-            person_dict = person.__dict__["__data__"]
-            request.update(person_dict)
+    if booking:
+        space = Space.get_or_none(Space.id == booking.space_id)
+        if space:
+            booking_dict = booking.__dict__["__data__"]
+            space_dict = space.__dict__["__data__"]
+            return render_template("approval.html", booking=booking_dict, space=space_dict)
+
+    return "Booking Not Found"
+
     
-
-    return render_template("approval.html", requests=requests)
 
 
 
@@ -128,7 +130,7 @@ def approval(booking_id):
 #         booking.approved = True
 #         booking.response = True
 #         booking.save()
-# # 
+# 
 
 
 # rejects a booking made on our space

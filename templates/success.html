@@ -1,10 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+{% extends "base.html" %}
+{% block content %}
 <body>
     <h1> Successfully submited your space</h1>
     <p><a href='/list-space'>Return to list a space</a></p>
@@ -16,7 +11,7 @@
     {% endif %}
 {% endwith %}
 </body>
-</html>
+{% endblock %}
 
 #add delay and send back to dashboard 
 #dynamically display a message depending on what has occured. 

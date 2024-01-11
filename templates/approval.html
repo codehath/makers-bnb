@@ -4,14 +4,22 @@
 
 {% block content %}
 <article>
-    {% for booking in requests_dict %}
-    Booking ID: {{request.id}}
-    Space ID: {{request.space_id.id}}
-    Space name: {{request.space_id.name}}
-    Booking start date: {{request.start_date}}
-    Booking end date: {{request.end_date}}
-    Price per night: {{request.space_id.price}}
-    {% endfor %}
+    <article>
+        {% for booking in booking_dict}
+        <p>Booking Name: {{ booking.name }}</p>
+        <p>Start Date: {{ booking.start_date }}</p>
+        <p>End Date: {{ booking.end_date }}</p>
+        <p>Approved: {{ booking.approved }}</p>
+        {% endfor %}
+    
+        <!-- Access space details directly -->
+        {% for space in space dict %}
+        <p>Space ID: {{ space.id }}</p>
+        <p>Space Name: {{ space.name }}</p>
+        <p>Space Description: {{ space.description }}</p>
+        {% endfor %}
+        <!-- Add other details as needed -->
+    </article>
     <p>other space not confirmed</p>
 </article>
 <form action="/confirm" method="post">

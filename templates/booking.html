@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Booking Details</title>
-</head>
+{% extends "base.html" %}
+<h1>Booking Details</h1>
+{% block content %}
 <body>
     {% if booking.space %}
     <p>ID: {{ booking.id }}</p>
@@ -20,7 +16,4 @@
         <p>No associated space found for this booking.</p>
     {% endif %}
 </body>
-</html>
-
-</body>
-</html>
+{% endblock %}
