@@ -1,5 +1,5 @@
 import os, datetime
-from flask import Flask, request, render_template, redirect, flash
+from flask import Flask, request, render_template, redirect, url_for
 from lib.database_connection import get_flask_database_connection
 
 from creds import *
@@ -8,10 +8,12 @@ from lib.availability import *
 from lib.booking import *
 from lib.space import *
 from peewee import DoesNotExist
+from flask_login import LoginManager
 
 
 # Create a new Flask app
 app = Flask(__name__)
+
 
 # Define your Peewee database instance
 db = PostgresqlDatabase(
@@ -67,6 +69,7 @@ def post_login():
         person_registered = Person.select().where(Person.email == email).first()
         print(f"person registered: {person_registered} ")
         if person_registered and person_registered.password == password: 
+            #Update the Database
             return "Logged in Yay"
         else: 
             return 'Invalid Password'
