@@ -4,15 +4,11 @@
 
 {% block content %}
 <article>
-    {% for booking in requests_dict %}
-    Booking ID: {{request.id}}
-    Space ID: {{request.space_id.id}}
-    Space name: {{request.space_id.name}}
-    Booking start date: {{request.start_date}}
-    Booking end date: {{request.end_date}}
-    Price per night: {{request.space_id.price}}
-    {% endfor %}
-    <p>other space not confirmed</p>
+    Booking ID: {{request.id}} <br/>
+    Space name: {{request.name}} <br/>
+    Booking start date: {{request.start_date}} <br/>
+    Booking end date: {{request.end_date}} <br/>
+    Price per night: {{request.price}} <br/>
 </article>
 <form action="/approve/{{booking_id}}" method="post">
     <button id="approve-button" type="submit">Approve this Booking</button>

@@ -77,6 +77,7 @@ def get_dashboard():
         space = Space.select().where(Space.id == booking["space_id"]).first()
         if space != None:
             space_dict = space.__dict__["__data__"]
+            del space_dict['id']
             booking.update(space_dict)
 
     # Creates a list of dictionaries for requests with request details
@@ -87,6 +88,7 @@ def get_dashboard():
         person = Space.select().where(Space.user_id == request["user_id"]).first()
         if person != None:
             person_dict = person.__dict__["__data__"]
+            del person_dict['id']
             request.update(person_dict)
 
     return render_template("dashboard.html", bookings=bookings_dicts, requests=requests)
@@ -103,20 +105,33 @@ def booking(booking_id):
 
 
 #
-@app.route("/approval/<int:booking_id>", methods=["GET"])
-def approval(booking_id):
-    user_id = 1 
-    requests = Booking.select().join(Space).where(Space.user_id == user_id)
-    requests_dicts = [request.__dict__["__data__"] for request in requests]
+# @app.route("/approval/<int:booking_id>", methods=["GET"])
+# def approval(booking_id):
+#     user_id = 1 
+#     requests = Booking.select().join(Space).where(Space.user_id == user_id)
+#     requests_dicts = [request.__dict__["__data__"] for request in requests]
 
-    for request in requests_dicts:
-        person = Space.select().where(Space.user_id == request["user_id"]).first()
-        if person != None:
-            person_dict = person.__dict__["__data__"]
-            request.update(person_dict)
+#     for request in requests_dicts:
+#         person = Space.select().where(Space.user_id == request["user_id"]).first()
+#         if person != None:
+#             person_dict = person.__dict__["__data__"]
+#             request.update(person_dict)
     
 
-    return render_template("approval.html", requests=requests, booking_id=booking_id)
+#     return render_template("approval.html", requests=requests, booking_id=booking_id)
+    
+@app.route("/approval/<int:booking_id>", methods=["GET"])
+def approval(booking_id):
+    request = Booking.select().join(Space).where(Booking.id == booking_id).first()
+    request_dict = request.__dict__["__data__"]
+
+    space = Space.select().where(Space.id == request.space_id).first()
+    space_dict = space.__dict__["__data__"]
+    del space_dict['id']
+    request_dict.update(space_dict)
+    
+    print("REQUEST:", request_dict)
+    return render_template("approval.html", request=request_dict)
 
 
 
