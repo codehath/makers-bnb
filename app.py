@@ -26,6 +26,8 @@ db = PostgresqlDatabase(
 # Connect to the database
 db.connect()
 
+logged_in_user = None
+
 # == Your Routes Here ==
 
 
@@ -62,19 +64,31 @@ def get_login():
 
 @app.route("/login", methods=["POST"])
 def post_login():
+    global logged_in_user
     email = request.form['email']
     password = request.form['password']
 
-    try:
-        person_registered = Person.select().where(Person.email == email).first()
-        print(f"person registered: {person_registered} ")
-        if person_registered and person_registered.password == password: 
-            #Update the Database
-            return "Logged in Yay"
-        else: 
-            return 'Invalid Password'
-    except DoesNotExist:
-            return 'User doesnt exist'
+    
+        
+    person_registered = Person.select().where(Person.email == email).first()
+    if person_registered == None:
+        return render_template("error.html", message="User does not exist, please try again.")
+
+    print(f"person registered: {person_registered} ")
+    if person_registered and person_registered.password == password:
+        # Update Table - Reset all users logged_in values to False
+        reset = Person.update(logged_in=False)
+        reset.execute()
+        # Update Table - Set logged_in value of the logging in user to True
+        person_registered.logged_in = True
+        person_registered.save()
+        logged_in_user = person_registered
+
+        return redirect("/dashboard")
+    else: 
+        return render_template("error.html", message="Verify your username and password and try again.")
+
+            
         
 # These lines start the server if you run this file directly
 # They also start the server configured to use the test database
