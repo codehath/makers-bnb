@@ -4,17 +4,17 @@
 
 {% block content %}
 <article>
-    User Name: {{request.user_name}} <br/>
+    Requestee: {{request.user_name}} <br/>
     Email: {{request.email}} <br/>
     Online: {{request.logged_in}} <br/>
     <form action="/message/{{request.user_id}}" method="post">
         <button id="message" type="submit">Message</button>
     </form>
     Booking ID: {{request.id}} <br/>
-    Space name: {{request.name}} <br/>
-    Booking start date: {{request.start_date}} <br/>
-    Booking end date: {{request.end_date}} <br/>
-    Price per night: {{request.price}} <br/>
+    {{request.name}} <br/>
+    Start Date: {{request.start_date}} <br/>
+    End Date: {{request.end_date}} <br/>
+    £{{request.price}}/n
 </article>
 <form action="/approve/{{request.id}}" method="post">
     <button id="approve-button" type="submit">Approve this Booking</button>
