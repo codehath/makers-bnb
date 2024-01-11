@@ -34,51 +34,79 @@ db.connect()
 def get_index():
     return render_template("index.html")
 
-#adding a space to the database through the webpage
-@app.route("/submit-list-a-space", methods=["POST"])
-def submit_a_space():
-    if request.method == 'POST':
-        # Retrieve form data
-        name = request.form['name']
-        description = request.form['description']
-        price = request.form['price']
-        start_date = request.form['start_date']
-        end_date = request.form['end_date']
-        new_space = Space.create(name=name, description=description, price=price, user_id=1)
-        Availability.create(start_date=start_date, end_date=end_date, space_id=new_space.id)
-        return redirect('/success')
+
+# adding a space to the database through the webpage
+@app.route("/list-space", methods=["POST"])
+def submit_space():
+    new_space = Space.create(
+        name=request.form["name"],
+        description=request.form["description"],
+        price=request.form["price"],
+        user_id=1,
+    )
+    Availability.create(
+        start_date=request.form["start_date"],
+        end_date=request.form["end_date"],
+        space_id=new_space.id,
+    )
+    return redirect("/success")
 
 
-  #Page rendering
-    
-@app.route("/list-a-space", methods=["GET"])
-def get_list_a_space():
-    return render_template("list_page.html")
+# Page rendering
+
+
+@app.route("/list-space", methods=["GET"])
+def get_list_space():
+    return render_template("list-space.html")
+
 
 @app.route("/success", methods=["GET"])
 def get_success():
-    return render_template("success_page.html")
+    return render_template("success.html")
 
 
 @app.route("/dashboard", methods=["GET"])
-def show_requests():
-    user_id = 1 
-    user_bookings = Booking.select().where(Booking.user_id == user_id)
-    space_requests = Booking.select().join(Space, on=(Booking.space_id == Space.id)).where(Space.user_id == user_id).order_by(Booking.id).limit(300)
-    return render_template("dashboard.html", user_bookings=user_bookings, space_requests=space_requests)
+def get_dashboard():
+    user_id = 1
 
-@app.route("/booking_details/<int:booking_id>", methods=['GET'])
-def booking_details(booking_id):
+    # Creates a list of dictionaries for bookings with booking details
+    bookings = Booking.select().where(Booking.user_id == user_id)
+    bookings_dicts = [booking.__dict__["__data__"] for booking in bookings]
+
+    for booking in bookings_dicts:
+        space = Space.select().where(Space.id == booking["space_id"]).first()
+        if space != None:
+            space_dict = space.__dict__["__data__"]
+            booking.update(space_dict)
+
+    # Creates a list of dictionaries for requests with request details
+    requests = Booking.select().join(Space).where(Space.user_id == user_id)
+    requests_dicts = [request.__dict__["__data__"] for request in requests]
+
+    for request in requests_dicts:
+        person = Space.select().where(Space.user_id == request["user_id"]).first()
+        if person != None:
+            person_dict = person.__dict__["__data__"]
+            request.update(person_dict)
+
+    return render_template("dashboard.html", bookings=bookings_dicts, requests=requests)
+
+
+@app.route("/booking/<int:booking_id>", methods=["GET"])
+def booking(booking_id):
     booking = Booking.select().join(Space).where(Booking.id == booking_id)
     print(booking)
     if booking:
-        return render_template("booking_details.html", booking=booking)
+        return render_template("booking.html", booking=booking)
     else:
         return "Booking not Found"
 
-@app.route("/approval_page/<int:booking_id>", methods=["GET"])
-def approval_page(booking_id):
-    return render_template("approval_page.html" , booking_id=booking_id )
+
+#
+@app.route("/approval/<int:booking_id>", methods=["GET"])
+def approval(booking_id):
+    return render_template("approval.html", booking_id=booking_id)
+
 
 # @app.route("/confirm-a-space", methods=["POST"])
 # def approve_a_space():
@@ -88,18 +116,11 @@ def approval_page(booking_id):
 #         Booking.update(approved=True, response=True)
 
 
-
-# rejects a booking made on our space 
+# rejects a booking made on our space
 @app.route("/reject-a-space", methods=["POST"])
 def refuse_a_space():
     if request.method == "POST":
-        Booking.update(response = True)
-        
-
-
-    
-
-
+        Booking.update(response=True)
 
 
 # These lines start the server if you run this file directly

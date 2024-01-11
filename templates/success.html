@@ -7,7 +7,14 @@
 </head>
 <body>
     <h1> Successfully submited your space</h1>
-    <p><a href='/list-a-space'>Return to list a space</a></p>
+    <p><a href='/list-space'>Return to list a space</a></p>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    {% endif %}
+{% endwith %}
 </body>
 </html>
 

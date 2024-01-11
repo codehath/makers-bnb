@@ -1,24 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "base.html" %}
+<h1> Dashboard</h1>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-</head>
+{% block content %}
+    <a href ="{{ url_for ('get_list_space') }}">
+        <button> List a Space</button>
+    </a>
 
-<body>
-    <h1> Dashboard</h1>
-    
     <article id="requests_made">
-        <h2>Requests I have made</h2>
+        <h2>My Booking Requests:</h2>
 
-        {% for booking in user_bookings %}
-        <a href="{{ url_for('booking_details', booking_id=booking.id) }}">
+        {% for booking in bookings %}
+        <a href="{{ url_for('booking', booking_id=booking.id) }}">
             <button>
-                <p>
-                   Booking ID:{{ booking.id}} Space ID: {{ booking.space_id }} Booking Start Date {{ booking.start_date }} Booking End Date: {{ booking.end_date }} 
-                   Approved: {{booking.approved }} Response Received: {{ booking.response }}</p>
+                {{booking.name}} <br/>
+                Start Date {{booking.start_date}} <br/>
+                End Date: {{booking.end_date}} <br/>
+                Approved: {{booking.approved}} <br/>
             </button>
         </a>
         <hr>
@@ -26,17 +23,17 @@
     </article>
 
     <article id="requests_recieved">
-        <h2>Requests I have recieved</h2>
+        <h2>Requests I have recieved:</h2>
 
-        {% for booking in space_requests %}
-        <a href="{{url_for('approval_page' , booking_id=booking.id) }}">
+        {% for request in requests %}
+        <a href="{{url_for('approval' , booking_id=request.id) }}">
         <button><p>
-            Booking ID: {{ booking.id }}
-            Space ID: {{ booking.space_id.id }}
-            Space name: {{ booking.space_id.name }}
-            Booking start date: {{ booking.start_date }}
-            Booking end date: {{ booking.end_date }}
-            Price per night: {{ booking.space_id.price }}
+            Booking ID: {{request.id}}
+            Space ID: {{request.space_id.id}}
+            Space name: {{request.space_id.name}}
+            Booking start date: {{request.start_date}}
+            Booking end date: {{request.end_date}}
+            Price per night: {{request.space_id.price}}
         </p></button>
         </a>
         <hr>
@@ -45,10 +42,4 @@
         
         {% endfor %}
     </article>
-
-    <a href ="{{ url_for ('list_page') }}">
-        <button> List a Space</button>
-    </a>
-</body>
-
-</html>
+{% endblock %}
