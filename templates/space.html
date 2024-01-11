@@ -3,6 +3,7 @@
     <head>
         <title>{{space.name}}</title>
         <meta charset="utf-8" />
+        <script src="https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.umd.min.js"></script>
     </head>
     <body>
         <h1>{{space.name}}</h1>
@@ -12,16 +13,35 @@
             <p>£{{space.price}} per night</p>
         </div>
 
-        <a href="/add-listing">
-            <button>Make a Listing</button>
-        </a>
-
         <form>
-            <label for="avail-from">Available from:</label><br>
-            <input type="date" id="avail-from" name="avail-from"><br>
-            <label for="avail-to">Available to:</label><br>
-            <input type="date" id="avail-to" name="avail-to">
-            <input type="submit" value="Search">
+            <input id="datepicker"/>
+            <script>
+                const picker = new easepick.create({
+                    element: "#datepicker",
+                    css: [
+                        "https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css"
+                    ],
+                    zIndex: 10,
+                    grid: 3,
+                    calendars: 6,
+                    inline: true,
+                    RangePlugin: {
+                        locale: {
+                            one: "night",
+                            other: "nights"
+                        }
+                    },
+                    LockPlugin: {
+                        minDate: "2024-01-01T00:00:00.000Z"
+                    },
+                    plugins: [
+                        "RangePlugin",
+                        "LockPlugin"
+                    ]
+                })
+                    </script>
+            <br/>
+            <input type="submit" value="Make Booking">
         </form>
 
         
