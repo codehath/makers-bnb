@@ -32,38 +32,51 @@ db.connect()
 #   ; open http://localhost:5000/index
 @app.route("/index", methods=["GET"])
 def get_index():
-    return render_template("index.html")
+    return redirect("/signup")
 
-#SIGNUP ROUTES
+
+# SIGNUP ROUTES
 @app.route("/signup", methods=["GET"])
 def get_signup():
     return render_template("signup.html")
 
+
 @app.route("/signup", methods=["POST"])
 def post_signup():
-    name = request.form['name']
-    email = request.form['email']
-    password = request.form['password']
-    if password != request.form['confirm_password']:
-        return f"Passwords do not match. Please try again." #Add Navigation Back Btn.
-        return redirect("/signup") 
+    name = request.form["name"]
+    email = request.form["email"]
+    password = request.form["password"]
+    if password != request.form["confirm_password"]:
+        return f"Passwords do not match. Please try again."  # Add Navigation Back Btn.
+        return redirect("/signup")
     else:
         Person.create(name=name, email=email, password=password)
         return redirect("/login")
-    #Check if Email Already Exists.
+    # Check if Email Already Exists.
     # Search emails in DB.
     # If Email already exists..
     # return f"Email already exists, enter alternative"
     # return redirect("/signup")
 
 
-#LOGIN ROUTES
+# LOGIN ROUTES
 @app.route("/login", methods=["GET"])
 def get_login():
     return render_template("login.html")
 
 
- 
+@app.route("/login", methods=["POST"])
+def post_signup():
+    name = request.form["name"]
+    email = request.form["email"]
+    password = request.form["password"]
+    if password != request.form["confirm_password"]:
+        return f"Passwords do not match. Please try again."  # Add Navigation Back Btn.
+        return redirect("/signup")
+    else:
+        Person.create(name=name, email=email, password=password)
+        return redirect("/login")
+
 
 # These lines start the server if you run this file directly
 # They also start the server configured to use the test database
