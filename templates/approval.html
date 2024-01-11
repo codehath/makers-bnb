@@ -16,11 +16,11 @@
     Booking end date: {{request.end_date}} <br/>
     Price per night: {{request.price}} <br/>
 </article>
-<form action="/approve/{{booking_id}}" method="post">
+<form action="/approve/{{request.id}}" method="post">
     <button id="approve-button" type="submit">Approve this Booking</button>
 </form>
-<form action="/reject/{{booking_id}}" id="rejectForm" method="post">
-    <input type="hidden" name="booking_id" value="">
+<form action="/reject/{{request.id}}" id="rejectForm" method="post">
+    <input type="hidden" name="request.id" value="">
     <button id="reject-button" type="submit">Reject this Booking</button>
 </form>
 
@@ -32,7 +32,7 @@
 
     // Set the value of the hidden input based on the number from the URL
     if (bookingNumber !== null) {
-        document.getElementById('booking_id').value = bookingNumber;
+        document.getElementById('request.id').value = bookingNumber;
     }
 
     // // Set the form action dynamically
