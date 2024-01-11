@@ -4,30 +4,24 @@
 
 {% block content %}
 <article>
-    <article>
-        {% for booking in booking_dict}
-        <p>Booking Name: {{ booking.name }}</p>
-        <p>Start Date: {{ booking.start_date }}</p>
-        <p>End Date: {{ booking.end_date }}</p>
-        <p>Approved: {{ booking.approved }}</p>
-        {% endfor %}
-    
-        <!-- Access space details directly -->
-        {% for space in space dict %}
-        <p>Space ID: {{ space.id }}</p>
-        <p>Space Name: {{ space.name }}</p>
-        <p>Space Description: {{ space.description }}</p>
-        {% endfor %}
-        <!-- Add other details as needed -->
-    </article>
-    <p>other space not confirmed</p>
+    User Name: {{request.user_name}} <br/>
+    Email: {{request.email}} <br/>
+    Online: {{request.logged_in}} <br/>
+    <form action="/message/{{request.user_id}}" method="post">
+        <button id="message" type="submit">Message</button>
+    </form>
+    Booking ID: {{request.id}} <br/>
+    Space name: {{request.name}} <br/>
+    Booking start date: {{request.start_date}} <br/>
+    Booking end date: {{request.end_date}} <br/>
+    Price per night: {{request.price}} <br/>
 </article>
-<form action="/confirm" method="post">
-    <button id="confirm-button" type="submit">Confirm this booking</button>
+<form action="/approve/{{booking_id}}" method="post">
+    <button id="approve-button" type="submit">Approve this Booking</button>
 </form>
-<form id="rejectForm" method="post">
+<form action="/reject/{{booking_id}}" id="rejectForm" method="post">
     <input type="hidden" name="booking_id" value="">
-    <button id="reject-button" type="submit">Reject this booking</button>
+    <button id="reject-button" type="submit">Reject this Booking</button>
 </form>
 
 <script>
@@ -41,9 +35,9 @@
         document.getElementById('booking_id').value = bookingNumber;
     }
 
-    // Set the form action dynamically
-    const form = document.getElementById('rejectForm');
-    form.action = '/reject/' + bookingNumber; // Replace '/reject/' with your actual endpoint
+    // // Set the form action dynamically
+    // const form = document.getElementById('rejectForm');
+    // form.action = '/reject/' + bookingNumber; // Replace '/reject/' with your actual endpoint
 </script>
 </body>
 {% endblock %}

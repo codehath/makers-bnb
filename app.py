@@ -1,7 +1,6 @@
 import os, datetime
-from flask import Flask, request, render_template, redirect, flash
+from flask import Flask, request, render_template, redirect
 from lib.database_connection import get_flask_database_connection
-
 
 from creds import *
 from lib.person import *
@@ -78,6 +77,7 @@ def get_dashboard():
         space = Space.select().where(Space.id == booking["space_id"]).first()
         if space != None:
             space_dict = space.__dict__["__data__"]
+            del space_dict['id']
             booking.update(space_dict)
 
     # Creates a list of dictionaries for requests with request details
@@ -88,6 +88,7 @@ def get_dashboard():
         person = Space.select().where(Space.user_id == request["user_id"]).first()
         if person != None:
             person_dict = person.__dict__["__data__"]
+            del person_dict['id']
             request.update(person_dict)
 
     return render_template("dashboard.html", bookings=bookings_dicts, requests=requests)
@@ -95,53 +96,88 @@ def get_dashboard():
 
 @app.route("/booking/<int:booking_id>", methods=["GET"])
 def booking(booking_id):
-    booking = Booking.select().join(Space).where(Booking.id == booking_id)
-    print(booking)
-    if booking:
-        return render_template("booking.html", booking=booking)
-    else:
-        return "Booking not Found"
+    request = Booking.select().join(Space).where(Booking.id == booking_id).first()
+    request_dict = request.__dict__["__data__"]
+
+    space = Space.select().where(Space.id == request.space_id).first()
+    space_dict = space.__dict__["__data__"]
+    del space_dict['id']
+    request_dict.update(space_dict)
+
+    person = Person.select().where(Person.id == request.user_id).first()
+    person_dict = person.__dict__["__data__"]
+    print("PERSON:", person_dict)
+    person_dict["user_name"] = person_dict["name"]
+    del person_dict["name"]
+    del person_dict['id']
+    request_dict.update(person_dict)
+    
+    print("REQUEST:", request_dict)
+    return render_template("booking.html", request=request_dict)
+
 
 
 #
-@app.route("/approval/<int:booking_id>", methods=["GET"])
-def approval(booking_id):
-    user_id = 2
-    booking = Booking.get_or_none((Booking.id == booking_id) & (Booking.user_id == user_id))
+# @app.route("/approval/<int:booking_id>", methods=["GET"])
+# def approval(booking_id):
+#     user_id = 1 
+#     requests = Booking.select().join(Space).where(Space.user_id == user_id)
+#     requests_dicts = [request.__dict__["__data__"] for request in requests]
 
-    if booking:
-        space = Space.get_or_none(Space.id == booking.space_id)
-        if space:
-            booking_dict = booking.__dict__["__data__"]
-            space_dict = space.__dict__["__data__"]
-            return render_template("approval.html", booking=booking_dict, space=space_dict)
-
-    return "Booking Not Found"
-
+#     for request in requests_dicts:
+#         person = Space.select().where(Space.user_id == request["user_id"]).first()
+#         if person != None:
+#             person_dict = person.__dict__["__data__"]
+#             request.update(person_dict)
     
 
+#     return render_template("approval.html", requests=requests, booking_id=booking_id)
+    
+@app.route("/approval/<int:booking_id>", methods=["GET"])
+def approval(booking_id):
+    request = Booking.select().join(Space).where(Booking.id == booking_id).first()
+    request_dict = request.__dict__["__data__"]
+
+    space = Space.select().where(Space.id == request.space_id).first()
+    space_dict = space.__dict__["__data__"]
+    del space_dict['id']
+    request_dict.update(space_dict)
+
+    person = Person.select().where(Person.id == request.user_id).first()
+    person_dict = person.__dict__["__data__"]
+    print("PERSON:", person_dict)
+    person_dict["user_name"] = person_dict["name"]
+    del person_dict["name"]
+    del person_dict['id']
+    request_dict.update(person_dict)
+    
+    print("REQUEST:", request_dict)
+    return render_template("approval.html", request=request_dict)
 
 
-# @app.route("/approve/<int:booking_id>", methods=["POST"])
-# def approve():
-#      booking = Booking.select().where(Booking.id == booking_id).first()
 
-#     if booking != None:
-#         booking.approved = True
-#         booking.response = True
-#         booking.save()
-# 
+@app.route("/approve/<int:booking_id>", methods=["POST"])
+def approve(booking_id):
+    booking = Booking.select().where(Booking.id == booking_id).first()
+
+    if booking != None:
+        booking.approved = True
+        booking.response = True
+        booking.save()
+
+    return render_template("success.html")
 
 
 # rejects a booking made on our space
 @app.route("/reject/<int:booking_id>", methods=["POST"])
-def reject():
+def reject(booking_id):
     booking = Booking.select().where(Booking.id == booking_id).first()
 
     if booking != None:
         booking.response = True
         booking.save()
-        
+    
+    return render_template("success.html")
 
 
 
