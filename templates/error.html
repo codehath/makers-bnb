@@ -6,10 +6,14 @@
     <title>Error</title>
     <h1>Error Page</h1>
     <p>{{ message }}</p>
-    
 
-    
-    
+    <script>
+        // Redirect back to Login after 3 seconds
+        setTimeout(function() {
+            window.location.href = 'http://localhost:5000/login';
+        }, 3000);
+    </script>
+     
 </head>
 <body>
     

@@ -51,7 +51,6 @@ def post_signup():
     password = request.form['password']
     if password != request.form['confirm_password']:
         return f"Passwords do not match. Please try again."
-    #Error - Parse in, Useful for Whole Application
         return redirect("/signup") 
     else:
         Person.create(name=name, email=email, password=password)
@@ -67,13 +66,9 @@ def post_login():
     global logged_in_user
     email = request.form['email']
     password = request.form['password']
-
-    
-        
     person_registered = Person.select().where(Person.email == email).first()
     if person_registered == None:
         return render_template("error.html", message="User does not exist, please try again.")
-
     print(f"person registered: {person_registered} ")
     if person_registered and person_registered.password == password:
         # Update Table - Reset all users logged_in values to False
