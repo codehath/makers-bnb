@@ -116,7 +116,7 @@ def approval(booking_id):
             request.update(person_dict)
     
 
-    return render_template("approval.html", requests=requests)
+    return render_template("approval.html", requests=requests, booking_id=booking_id)
 
 
 
@@ -133,13 +133,14 @@ def approval(booking_id):
 
 # rejects a booking made on our space
 @app.route("/reject/<int:booking_id>", methods=["POST"])
-def reject():
+def reject(booking_id):
     booking = Booking.select().where(Booking.id == booking_id).first()
 
     if booking != None:
         booking.response = True
         booking.save()
-        
+    
+    return render_template("success.html")
 
 
 
