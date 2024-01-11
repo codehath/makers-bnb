@@ -105,22 +105,43 @@ def booking(booking_id):
 #
 @app.route("/approval/<int:booking_id>", methods=["GET"])
 def approval(booking_id):
-    return render_template("approval.html", booking_id=booking_id)
+    user_id = 1 
+    requests = Booking.select().join(Space).where(Space.user_id == user_id)
+    requests_dicts = [request.__dict__["__data__"] for request in requests]
+
+    for request in requests_dicts:
+        person = Space.select().where(Space.user_id == request["user_id"]).first()
+        if person != None:
+            person_dict = person.__dict__["__data__"]
+            request.update(person_dict)
+    
+
+    return render_template("approval.html", requests=requests)
 
 
-# @app.route("/confirm-a-space", methods=["POST"])
-# def approve_a_space():
-#     if request.method == "POST":
-#         #approved = request.form['approved']
-#         #response = request.form
-#         Booking.update(approved=True, response=True)
+
+# @app.route("/approve/<int:booking_id>", methods=["POST"])
+# def approve():
+#      booking = Booking.select().where(Booking.id == booking_id).first()
+
+#     if booking != None:
+#         booking.approved = True
+#         booking.response = True
+#         booking.save()
+# # 
 
 
 # rejects a booking made on our space
-@app.route("/reject-a-space", methods=["POST"])
-def refuse_a_space():
-    if request.method == "POST":
-        Booking.update(response=True)
+@app.route("/reject/<int:booking_id>", methods=["POST"])
+def reject():
+    booking = Booking.select().where(Booking.id == booking_id).first()
+
+    if booking != None:
+        booking.response = True
+        booking.save()
+        
+
+
 
 
 # These lines start the server if you run this file directly
