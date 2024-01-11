@@ -1,5 +1,5 @@
 # test_email.py
-from lib.send_email import send_signup_email
+from lib.send_email import signup_email
 
 def main():
     # Test data
@@ -10,7 +10,7 @@ def main():
     recipient_email = 'ala78698@hotmail.co.uk'
     subject = 'Welcome to MakersBnB'
     body = '<p>This is a test email.</p>'
-    send_signup_email(user_email)
+    signup_email(user_email)
 
 if __name__ == "__main__":
     main()

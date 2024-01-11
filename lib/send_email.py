@@ -1,8 +1,5 @@
 import requests
-#from creds import MAILGUN_DOMAIN, MAILGUN_API_KEY
-
-MAILGUN_API_KEY = '505fe23a102dbd5d37dd6d8f6c262c48-7ecaf6b5-0e4937a0'
-MAILGUN_DOMAIN = 'sandbox8b4c55b97ded45258c9e7b59df25d875.mailgun.org'
+from creds import MAILGUN_DOMAIN, MAILGUN_API_KEY
 
 def send_email(to_email, subject, body):
     mailgun_url = f'https://api.mailgun.net/v3/{MAILGUN_DOMAIN}/messages'
