@@ -120,15 +120,16 @@ def approval(booking_id):
 
 
 
-# @app.route("/approve/<int:booking_id>", methods=["POST"])
-# def approve():
-#      booking = Booking.select().where(Booking.id == booking_id).first()
+@app.route("/approve/<int:booking_id>", methods=["POST"])
+def approve(booking_id):
+    booking = Booking.select().where(Booking.id == booking_id).first()
 
-#     if booking != None:
-#         booking.approved = True
-#         booking.response = True
-#         booking.save()
-# # 
+    if booking != None:
+        booking.approved = True
+        booking.response = True
+        booking.save()
+
+    return render_template("success.html")
 
 
 # rejects a booking made on our space

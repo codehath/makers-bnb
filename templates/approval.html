@@ -14,12 +14,12 @@
     {% endfor %}
     <p>other space not confirmed</p>
 </article>
-<form action="/confirm" method="post">
-    <button id="confirm-button" type="submit">Confirm this booking</button>
+<form action="/approve/{{booking_id}}" method="post">
+    <button id="approve-button" type="submit">Approve this Booking</button>
 </form>
 <form action="/reject/{{booking_id}}" id="rejectForm" method="post">
     <input type="hidden" name="booking_id" value="">
-    <button id="reject-button" type="submit">Reject this booking</button>
+    <button id="reject-button" type="submit">Reject this Booking</button>
 </form>
 
 <script>
