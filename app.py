@@ -83,17 +83,21 @@ def post_login():
     else: 
         return render_template("error.html", message="Verify your username and password and try again.")
 
-      
+
 # NEW SPACE ROUTES
 @app.route("/new-space", methods=["GET"])
 def get_new_space():
+    global logged_in_user
+    if logged_in_user == None:
+        return redirect("/login")
     return render_template("new-space.html")
 
 @app.route("/new-space", methods=["POST"])
 def submit_space():
-    user_id = 1
-    # global logged_in_user
-    # user_id = logged_in_user.id
+    global logged_in_user
+    if logged_in_user == None:
+        return redirect("/login")
+    user_id = logged_in_user.id
 
     new_space = Space.create(
         name=request.form["name"],
@@ -113,13 +117,14 @@ def submit_space():
 def get_success():
     return render_template("success.html")
 
-  
+
 # DASHBOARD ROUTE
 @app.route("/dashboard", methods=["GET"])
 def get_dashboard():
-    user_id = 1
-    # global logged_in_user
-    # user_id = logged_in_user.id
+    global logged_in_user
+    if logged_in_user == None:
+        return redirect("/login")
+    user_id = logged_in_user.id
 
     # Creates a list of dictionaries for bookings with booking details
     bookings = Booking.select().where(Booking.user_id == user_id)
@@ -148,10 +153,14 @@ def get_dashboard():
 
     return render_template("dashboard.html", bookings=bookings_dicts, requests=requests)
 
-  
+
 # VIEW BOOKING ROUTE
 @app.route("/booking/<int:booking_id>", methods=["GET"])
 def booking(booking_id):
+    global logged_in_user
+    if logged_in_user == None:
+        return redirect("/login")
+    
     request = Booking.select().join(Space).where(Booking.id == booking_id).first()
     request_dict = request.__dict__["__data__"]
 
@@ -169,10 +178,14 @@ def booking(booking_id):
     
     return render_template("booking.html", request=request_dict)
 
-  
+
 # APPROVAL ROUTES
 @app.route("/approval/<int:booking_id>", methods=["GET"])
 def approval(booking_id):
+    global logged_in_user
+    if logged_in_user == None:
+        return redirect("/login")
+    
     request = Booking.select().join(Space).where(Booking.id == booking_id).first()
     request_dict = request.__dict__["__data__"]
 
@@ -193,6 +206,10 @@ def approval(booking_id):
 
 @app.route("/approve/<int:booking_id>", methods=["POST"])
 def approve(booking_id):
+    global logged_in_user
+    if logged_in_user == None:
+        return redirect("/login")
+    
     booking = Booking.select().where(Booking.id == booking_id).first()
 
     if booking != None:
@@ -204,6 +221,10 @@ def approve(booking_id):
 
 @app.route("/reject/<int:booking_id>", methods=["POST"])
 def reject(booking_id):
+    global logged_in_user
+    if logged_in_user == None:
+        return redirect("/login")
+    
     booking = Booking.select().where(Booking.id == booking_id).first()
 
     if booking != None:
