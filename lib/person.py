@@ -9,7 +9,9 @@ class Person(Model):
     name = CharField()
     email = CharField()
     password = CharField()
+    phone_number = CharField(default="+447234589237")
     logged_in = BooleanField(default=False)
+
 
     class Meta:
         database = db  # This model uses the "people.db" database.
