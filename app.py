@@ -36,7 +36,7 @@ logged_in_user = None
 #   ; open http://localhost:5000/index
 @app.route("/", methods=["GET"])
 def get_index():
-    return redirect("/login")
+    return redirect("/spaces")
 
 # SIGNUP ROUTES
 @app.route("/signup", methods=["GET"])
