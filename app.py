@@ -106,13 +106,11 @@ def booking(booking_id):
 
     person = Person.select().where(Person.id == request.user_id).first()
     person_dict = person.__dict__["__data__"]
-    print("PERSON:", person_dict)
     person_dict["user_name"] = person_dict["name"]
     del person_dict["name"]
     del person_dict['id']
     request_dict.update(person_dict)
     
-    print("REQUEST:", request_dict)
     return render_template("booking.html", request=request_dict)
 
 
@@ -145,13 +143,11 @@ def approval(booking_id):
 
     person = Person.select().where(Person.id == request.user_id).first()
     person_dict = person.__dict__["__data__"]
-    print("PERSON:", person_dict)
     person_dict["user_name"] = person_dict["name"]
     del person_dict["name"]
     del person_dict['id']
     request_dict.update(person_dict)
     
-    print("REQUEST:", request_dict)
     return render_template("approval.html", request=request_dict)
 
 

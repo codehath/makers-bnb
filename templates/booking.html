@@ -3,17 +3,15 @@
 {% block content %}
 <body>
     <article>
-        User Name: {{request.user_name}} <br/>
-        Email: {{request.email}} <br/>
-        Online: {{request.logged_in}} <br/>
-        <form action="/message/{{request.user_id}}" method="post">
-            <button id="message" type="submit">Message</button>
-        </form>
-        Booking ID: {{request.id}} <br/>
-        Space name: {{request.name}} <br/>
+        <h1>{{request.name}}</h1><br/>
         Booking start date: {{request.start_date}} <br/>
         Booking end date: {{request.end_date}} <br/>
         Price per night: {{request.price}} <br/>
+        <p></p>
+        Booking ID: {{request.id}} <br/>
+        Owner Name: {{request.user_name}} <br/>
+        Email: {{request.email}} <br/>
+        Online: {{request.logged_in}} <br/>
     </article>
 </body>
 {% endblock %}
