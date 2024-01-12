@@ -6,7 +6,7 @@
     <meta http-equiv="refresh" content="3;url={{ url_for('get_dashboard') }}">
     <title>Success</title><body>
     <h1> Successfully submited your space</h1>
-    <p><a href='/list-space'>Return to list a space</a></p>
+    <p><a href='/new-space'>Return to list a space</a></p>
     {% with messages = get_flashed_messages() %}
     {% if messages %}
         {% for message in messages %}

@@ -4,14 +4,17 @@
 <body>
     <article>
         <h1>{{request.name}}</h1><br/>
-        Booking start date: {{request.start_date}} <br/>
-        Booking end date: {{request.end_date}} <br/>
-        Price per night: {{request.price}} <br/>
-        <p></p>
+        Start Date: {{request.start_date}} <br/>
+        End Date: {{request.end_date}} <br/>
+        £{{request.price}}/n <br/>
         Booking ID: {{request.id}} <br/>
+        <br/>
         Owner Name: {{request.user_name}} <br/>
         Email: {{request.email}} <br/>
         Online: {{request.logged_in}} <br/>
+        <form action="/message/{{request.user_id}}" method="post">
+            <button id="message" type="submit">Message</button>
+        </form>
     </article>
 </body>
 {% endblock %}

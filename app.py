@@ -36,7 +36,7 @@ def get_index():
 
 
 # adding a space to the database through the webpage
-@app.route("/list-space", methods=["POST"])
+@app.route("/new-space", methods=["POST"])
 def submit_space():
     user_id = 1
     # global logged_in_user
@@ -59,9 +59,9 @@ def submit_space():
 # Page rendering
 
 
-@app.route("/list-space", methods=["GET"])
-def get_list_space():
-    return render_template("list-space.html")
+@app.route("/new-space", methods=["GET"])
+def get_new_space():
+    return render_template("new-space.html")
 
 
 @app.route("/success", methods=["GET"])
@@ -87,7 +87,10 @@ def get_dashboard():
             booking.update(space_dict)
 
     # Creates a list of dictionaries for requests with request details
-    requests = Booking.select().join(Space).where(Space.user_id == user_id)
+    requests = Booking.select().join(Space).where(
+        (Space.user_id == user_id) & 
+        (Booking.response == False)
+        )
     requests_dicts = [request.__dict__["__data__"] for request in requests]
 
     for request in requests_dicts:
