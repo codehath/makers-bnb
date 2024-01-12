@@ -110,12 +110,12 @@ def submit_space():
         end_date=request.form["end_date"],
         space_id=new_space.id,
     )
-    return redirect("/success")
+    return redirect("/success", message="Succesfully submitted your space")
 
 # SUCCESS ROUTE
 @app.route("/success", methods=["GET"])
 def get_success():
-    return render_template("success.html")
+    return render_template("success.html", message="Succesfully submitted your space")
 
 
 # DASHBOARD ROUTE
