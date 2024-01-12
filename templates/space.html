@@ -13,7 +13,7 @@
             <p>£{{space.price}} per night</p>
         </div>
 
-        <form>
+        <form action="/spaces/{{id}}" method="POST">
             <input id="datepicker"/>
             <script>
                 const picker = new easepick.create({
