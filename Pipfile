@@ -13,6 +13,7 @@ py = "*"
 peewee = "*"
 psycopg2-binary = "*"
 flask-login = "*"
+twilio = "*"
 
 [dev-packages]
 autopep8 = "*"
