@@ -102,12 +102,22 @@ def get_dashboard():
 
 @app.route("/booking/<int:booking_id>", methods=["GET"])
 def booking(booking_id):
-    booking = Booking.select().join(Space).where(Booking.id == booking_id)
-    print(booking)
-    if booking:
-        return render_template("booking.html", booking=booking)
-    else:
-        return "Booking not Found"
+    request = Booking.select().join(Space).where(Booking.id == booking_id).first()
+    request_dict = request.__dict__["__data__"]
+
+    space = Space.select().where(Space.id == request.space_id).first()
+    space_dict = space.__dict__["__data__"]
+    del space_dict['id']
+    request_dict.update(space_dict)
+
+    person = Person.select().where(Person.id == request.user_id).first()
+    person_dict = person.__dict__["__data__"]
+    person_dict["user_name"] = person_dict["name"]
+    del person_dict["name"]
+    del person_dict['id']
+    request_dict.update(person_dict)
+    
+    return render_template("booking.html", request=request_dict)
 
 
 @app.route("/approval/<int:booking_id>", methods=["GET"])
@@ -123,13 +133,11 @@ def approval(booking_id):
 
     person = Person.select().where(Person.id == request.user_id).first()
     person_dict = person.__dict__["__data__"]
-    print("PERSON:", person_dict)
     person_dict["user_name"] = person_dict["name"]
     del person_dict["name"]
     del person_dict['id']
     request_dict.update(person_dict)
     
-    print("REQUEST:", request_dict)
     return render_template("approval.html", request=request_dict)
 
 

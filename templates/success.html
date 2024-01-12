@@ -1,11 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
+
+{% block content %}
+<!-- #add delay and send back to dashboard 
+#dynamically display a message depending on what has occured.  -->
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+    <meta http-equiv="refresh" content="3;url={{ url_for('get_dashboard') }}">
+    <title>Success</title><body>
     <h1> Successfully submited your space</h1>
     <p><a href='/list-space'>Return to list a space</a></p>
     {% with messages = get_flashed_messages() %}
@@ -16,7 +15,4 @@
     {% endif %}
 {% endwith %}
 </body>
-</html>
-
-#add delay and send back to dashboard 
-#dynamically display a message depending on what has occured. 
+{% endblock %}
