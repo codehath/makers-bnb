@@ -23,15 +23,15 @@ def date_message(booking):
 
 def requested_text(person, space, booking):
     message_body = f"{person.name} has requested to book {space.name} {date_message(booking)}. Please review the request."
-    send_booking_sms(client, person.phone_number, message_body)
+    send_booking_sms(client, person.number, message_body)
 
 def requested_text_confirmed(person, space, booking):
     message_body = f"Great news! Your booking request for {space.name} {date_message(booking)} has been confirmed. We look forward to welcoming you!"
-    send_booking_sms(client, person.phone_number, message_body)
+    send_booking_sms(client, person.number, message_body)
 
 def requested_text_denied(person, space, booking):
     message_body = f"We regret to inform you that your booking request for {space.name} {date_message(booking)} has been denied. Please contact us for more information."
-    send_booking_sms(client, person.phone_number, message_body)
+    send_booking_sms(client, person.number, message_body)
 
 
     

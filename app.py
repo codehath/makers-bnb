@@ -1,6 +1,10 @@
 import os, datetime
 from flask import Flask, request, render_template, redirect
 from lib.database_connection import get_flask_database_connection
+from creds import MAILGUN_API_KEY, MAILGUN_DOMAIN, twilio_phone_number, account_sid, auth_token
+import requests
+from lib.send_texts import *
+from twilio.rest import Client
 # from flask_login import LoginManager
 # from peewee import DoesNotExist
 
@@ -9,6 +13,8 @@ from lib.person import *
 from lib.availability import *
 from lib.booking import *
 from lib.space import *
+
+from lib.send_email import send_email, signup_email, space_created, approve_request, booking_denied, booking_request, booking_confirmed
 
 
 # Create a new Flask app
@@ -53,8 +59,13 @@ def post_signup():
         return f"Passwords do not match. Please try again."
         return redirect("/signup") 
     else:
-        Person.create(name=name, email=email, password=password)
-        return redirect("/login")
+        person = Person.create(name=name, email=email, password=password, number=number)
+
+    # SEND WELCOME EMAIL FOR SIGNUP
+    signup_email(person)
+        
+    return redirect("/login")
+    
 
 # LOGIN ROUTES
 @app.route("/login", methods=["GET"])
@@ -110,6 +121,9 @@ def submit_space():
         end_date=request.form["end_date"],
         space_id=new_space.id,
     )
+    # Notify the user about the created space
+    space_created(logged_in_user, new_space)
+
     return redirect("/success")
 
 # SUCCESS ROUTE
@@ -201,9 +215,13 @@ def approval(booking_id):
     del person_dict["name"]
     del person_dict['id']
     request_dict.update(person_dict)
+
+    # Send email for booking request
+    
     
     return render_template("approval.html", request=request_dict)
 
+#Approving a Booking
 @app.route("/approve/<int:booking_id>", methods=["POST"])
 def approve(booking_id):
     global logged_in_user
@@ -216,6 +234,16 @@ def approve(booking_id):
         booking.approved = True
         booking.response = True
         booking.save()
+        #Sending an email to the person who booked
+        
+
+        
+#Sending text to the person who booked
+    person = Person.select().where(Person.id == booking.user_id ).first()
+    space = Space.select().where(Space.id == booking.space_id).first()
+    requested_text_confirmed(person, space, booking)
+    booking_confirmed(person, space, booking)
+    
 
     return render_template("success.html")
 
@@ -230,7 +258,14 @@ def reject(booking_id):
     if booking != None:
         booking.response = True
         booking.save()
-    
+
+        # Fetch additional details (Person and Space)
+        person = Person.select().where(Person.id == booking.user_id).first()
+        space = Space.select().where(Space.id == booking.space_id).first()
+
+        # Send a rejection email to the person who booked
+        booking_denied(person, space, booking)
+        requested_text_denied(person, space, booking)
     return render_template("success.html")
 
 
