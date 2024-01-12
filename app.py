@@ -1,19 +1,18 @@
 import os, datetime
 from flask import Flask, request, render_template, redirect, url_for
 from lib.database_connection import get_flask_database_connection
+# from flask_login import LoginManager
+# from peewee import DoesNotExist
 
 from creds import *
 from lib.person import *
 from lib.availability import *
 from lib.booking import *
 from lib.space import *
-from peewee import DoesNotExist
-from flask_login import LoginManager
 
 
 # Create a new Flask app
 app = Flask(__name__)
-
 
 # Define your Peewee database instance
 db = PostgresqlDatabase(
@@ -35,11 +34,11 @@ logged_in_user = None
 # Returns the homepage
 # Try it:
 #   ; open http://localhost:5000/index
-@app.route("/index", methods=["GET"])
+@app.route("/", methods=["GET"])
 def get_index():
-    return render_template("index.html")
+    return redirect("/login")
 
-#SIGNUP ROUTES
+# SIGNUP ROUTES
 @app.route("/signup", methods=["GET"])
 def get_signup():
     return render_template("signup.html")
@@ -48,6 +47,7 @@ def get_signup():
 def post_signup():
     name = request.form['name']
     email = request.form['email']
+    number = request.form['number']
     password = request.form['password']
     if password != request.form['confirm_password']:
         return f"Passwords do not match. Please try again."
@@ -56,7 +56,7 @@ def post_signup():
         Person.create(name=name, email=email, password=password)
         return redirect("/login")
 
-#LOGIN ROUTES
+# LOGIN ROUTES
 @app.route("/login", methods=["GET"])
 def get_login():
     return render_template("login.html")
