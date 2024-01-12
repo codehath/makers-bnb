@@ -22,9 +22,9 @@ db.connect()
 db.drop_tables([Person, Space, Booking, Availability])
 db.create_tables([Person, Space, Booking, Availability])
 
-new_person = Person.create(name="John Doe", email="john", password="password")
-new_person2 = Person.create(name="Bruce Wayne", email="bruce", password="password")
-new_person3 = Person.create(name="Good Samaritan", email="goodsamiritan@gmail.com", password="password")
+new_person = Person.create(name="John Doe", email="john@hotmail.com", password="password", number="07399155353")
+new_person2 = Person.create(name="Bruce Wayne", email="troytolhurst@outlook.com", password="password", number="07500019238")
+new_person3 = Person.create(name="Good Samaritan", email="goodsamiritan@gmail.com", password="password", number="07500019238")
 
 
 # creating new space examples for db entry

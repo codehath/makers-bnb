@@ -9,6 +9,7 @@ class Person(Model):
     name = CharField()
     email = CharField()
     password = CharField()
+    number = CharField(max_length=11)
     logged_in = BooleanField(default=False)
 
     class Meta:
