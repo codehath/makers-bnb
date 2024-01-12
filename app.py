@@ -38,11 +38,15 @@ def get_index():
 # adding a space to the database through the webpage
 @app.route("/list-space", methods=["POST"])
 def submit_space():
+    user_id = 1
+    # global logged_in_user
+    # user_id = logged_in_user.id
+
     new_space = Space.create(
         name=request.form["name"],
         description=request.form["description"],
         price=request.form["price"],
-        user_id=1,
+        user_id=user_id,
     )
     Availability.create(
         start_date=request.form["start_date"],
@@ -67,7 +71,9 @@ def get_success():
 
 @app.route("/dashboard", methods=["GET"])
 def get_dashboard():
-    user_id = 2
+    user_id = 1
+    # global logged_in_user
+    # user_id = logged_in_user.id
 
     # Creates a list of dictionaries for bookings with booking details
     bookings = Booking.select().where(Booking.user_id == user_id)
@@ -114,23 +120,6 @@ def booking(booking_id):
     return render_template("booking.html", request=request_dict)
 
 
-
-#
-# @app.route("/approval/<int:booking_id>", methods=["GET"])
-# def approval(booking_id):
-#     user_id = 1 
-#     requests = Booking.select().join(Space).where(Space.user_id == user_id)
-#     requests_dicts = [request.__dict__["__data__"] for request in requests]
-
-#     for request in requests_dicts:
-#         person = Space.select().where(Space.user_id == request["user_id"]).first()
-#         if person != None:
-#             person_dict = person.__dict__["__data__"]
-#             request.update(person_dict)
-    
-
-#     return render_template("approval.html", requests=requests, booking_id=booking_id)
-    
 @app.route("/approval/<int:booking_id>", methods=["GET"])
 def approval(booking_id):
     request = Booking.select().join(Space).where(Booking.id == booking_id).first()
@@ -139,6 +128,7 @@ def approval(booking_id):
     space = Space.select().where(Space.id == request.space_id).first()
     space_dict = space.__dict__["__data__"]
     del space_dict['id']
+    del space_dict['user_id']
     request_dict.update(space_dict)
 
     person = Person.select().where(Person.id == request.user_id).first()
