@@ -12,6 +12,7 @@ pytest-xprocess = "*"
 py = "*"
 peewee = "*"
 psycopg2-binary = "*"
+flask-login = "*"
 
 [dev-packages]
 autopep8 = "*"

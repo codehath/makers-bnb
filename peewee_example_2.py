@@ -24,6 +24,7 @@ db.create_tables([Person, Space, Booking, Availability])
 
 new_person = Person.create(name="John Doe", email="john", password="password")
 new_person2 = Person.create(name="Bruce Wayne", email="bruce", password="password")
+new_person3 = Person.create(name="Good Samaritan", email="goodsamiritan@gmail.com", password="password")
 
 
 # creating new space examples for db entry
