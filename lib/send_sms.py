@@ -12,17 +12,25 @@ def send_booking_sms(client, recipient_phone_number,  message_body):
 
     print(f"Message SID: {message.sid}")
 
-# booking_status, person_name, space_name, booking_date
+def date_message(booking):
+    # Adjust message if only 1 night
+    date = f'from {booking.start_date} to {booking.end_date}'
+    if booking.start_date == booking.end_date:
+        date = f'on {booking.start_date}'
+    
+    return date
+
+
 def requested_text(person, space, booking):
-    message_body = f"{person.name} has requested to book {space.name} on {booking.start_date}. Please review the request."
+    message_body = f"{person.name} has requested to book {space.name} {date_message(booking)}. Please review the request."
     send_booking_sms(client, person.phone_number, message_body)
 
-def requested_text_confirmed(space, booking):
-    message_body = f"Great news! Your booking request for {space.name} on {booking.start_date} has been confirmed. We look forward to welcoming you!"
+def requested_text_confirmed(person, space, booking):
+    message_body = f"Great news! Your booking request for {space.name} {date_message(booking)} has been confirmed. We look forward to welcoming you!"
     send_booking_sms(client, person.phone_number, message_body)
 
-def requested_text_denied(space, booking):
-    message_body = f"We regret to inform you that your booking request for {space.name} on {booking.start_date} has been denied. Please contact us for more information."
+def requested_text_denied(person, space, booking):
+    message_body = f"We regret to inform you that your booking request for {space.name} {date_message(booking)} has been denied. Please contact us for more information."
     send_booking_sms(client, person.phone_number, message_body)
 
 
