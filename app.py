@@ -61,6 +61,16 @@ def post_signup():
 def get_login():
     return render_template("login.html")
 
+# LOG OUT ROUTE
+@app.route("/logout", methods=["GET"])
+def get_logout():
+    global logged_in_user
+    if logged_in_user:
+        logged_in_user.logged_in = False
+        logged_in_user.save()
+        logged_in_user = None 
+    return render_template("login.html")
+
 @app.route("/login", methods=["POST"])
 def post_login():
     global logged_in_user
@@ -76,7 +86,7 @@ def post_login():
         reset.execute()
         # Update Table - Set logged_in value of the logging in user to True
         person_registered.logged_in = True
-        person_registered.save()
+        person_registered.save() 
         logged_in_user = person_registered
 
         return redirect("/dashboard")
