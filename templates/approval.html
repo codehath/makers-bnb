@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+<h1>Approval Page</h1>
+
+{% block content %}
+<article>
+    <h1>{{request.name}}</h1>
+    Booking ID: {{request.id}} <br/>
+    <br/>
+    Lodger Details
+    {{request.user_name}} <br/>
+    Email: {{request.email}} <br/>
+    Online: {{request.logged_in}} <br/>
+    <form action="/message/{{request.user_id}}" method="post">
+        <button id="message" type="submit">Message</button>
+    </form>
+    <br/>
+    Start Date: {{request.start_date}} <br/>
+    End Date: {{request.end_date}} <br/>
+    £{{request.price}}/n
+</article>
+
+<br/>
+<form action="/approve/{{request.id}}" method="post">
+    <button id="approve-button" type="submit">Approve this Booking</button>
+</form>
+<form action="/reject/{{request.id}}" id="rejectForm" method="post">
+    <input type="hidden" name="request.id" value="">
+    <button id="reject-button" type="submit">Reject this Booking</button>
+</form>
+
+<script>
+    // Get the number from the current URL
+    const currentURL = window.location.href;
+    const matchResult = currentURL.match(/\/(\d+)$/); // Matches the last digits in the URL
+    const bookingNumber = matchResult ? matchResult[1] : null;
+
+    // Set the value of the hidden input based on the number from the URL
+    if (bookingNumber !== null) {
+        document.getElementById('request.id').value = bookingNumber;
+    }
+
+    // // Set the form action dynamically
+    // const form = document.getElementById('rejectForm');
+    // form.action = '/reject/' + bookingNumber; // Replace '/reject/' with your actual endpoint
+</script>
+</body>
+{% endblock %}

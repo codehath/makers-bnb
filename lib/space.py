@@ -11,6 +11,7 @@ class Space(Model):
     description = CharField()
     price = IntegerField()
     user_id = ForeignKeyField(Person)
+    
 
     class Meta:
         database = db
