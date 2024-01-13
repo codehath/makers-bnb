@@ -24,13 +24,13 @@ db.create_tables([Person, Space, Booking, Availability])
 
 # Seed data for person table
 persons_data = [
-    {"name": "John Doe", "email": "john", "password": "password"},
-    {"name": "Bruce Wayne", "email": "bruce", "password": "password"},
-    {"name": "Jane Doe", "email": "jane", "password": "password123"},
-    {"name": "Alice Smith", "email": "alice", "password": "secret"},
-    {"name": "Bob Johnson", "email": "bob", "password": "pass123"},
-    {"name": "Eve Wilson", "email": "eve", "password": "securepass"},
-    {"name": "Charlie Brown", "email": "charlie", "password": "mysecret"},
+    {"name": "John Doe", "email": "john@example.com", "password": "password", "number": "00000000000"},
+    {"name": "Bruce Wayne", "email": "bruce@example.com", "password": "password", "number": "00000000000"},
+    {"name": "Jane Doe", "email": "jane@example.com", "password": "password123", "number": "00000000000"},
+    {"name": "Alice Smith", "email": "alice@example.com", "password": "secret", "number": "00000000000"},
+    {"name": "Bob Johnson", "email": "bob@example.com", "password": "pass123", "number": "00000000000"},
+    {"name": "Eve Wilson", "email": "eve@example.com", "password": "securepass", "number": "00000000000"},
+    {"name": "Charlie Brown", "email": "charlie@example.com", "password": "mysecret", "number": "00000000000"},
 ]
 
 # Seed data for spaces
@@ -38,31 +38,31 @@ spaces_data = [
     {
         "name": "Cozy Cabin",
         "description": "A small cabin in the woods",
-        "price": 200,
+        "price": 20,
         "user_id": 1,
     },
     {
         "name": "City Apartment",
         "description": "Modern apartment in the heart of the city",
-        "price": 800,
+        "price": 80,
         "user_id": 2,
     },
     {
         "name": "Beach House",
         "description": "Beautiful house with ocean view",
-        "price": 1000,
+        "price": 100,
         "user_id": 2,
     },
     {
         "name": "Mountain Retreat",
         "description": "Secluded retreat in the mountains",
-        "price": 600,
+        "price": 60,
         "user_id": 1,
     },
     {
         "name": "Urban Loft",
         "description": "Chic loft in a trendy neighborhood",
-        "price": 700,
+        "price": 70,
         "user_id": 1,
     },
 ]
@@ -71,28 +71,28 @@ spaces_data = [
 availabilities_data = [
     {
         "space_id": 1,
-        "start_date": datetime.date(2022, 1, 15),
-        "end_date": datetime.date(2022, 2, 28),
+        "start_date": datetime.date(2024, 1, 15),
+        "end_date": datetime.date(2024, 2, 28),
     },
     {
         "space_id": 2,
-        "start_date": datetime.date(2022, 3, 1),
-        "end_date": datetime.date(2022, 3, 31),
+        "start_date": datetime.date(2024, 3, 1),
+        "end_date": datetime.date(2024, 3, 31),
     },
     {
         "space_id": 3,
-        "start_date": datetime.date(2022, 4, 5),
-        "end_date": datetime.date(2022, 4, 25),
+        "start_date": datetime.date(2024, 4, 5),
+        "end_date": datetime.date(2024, 4, 25),
     },
     {
         "space_id": 4,
-        "start_date": datetime.date(2022, 5, 20),
-        "end_date": datetime.date(2022, 5, 25),
+        "start_date": datetime.date(2024, 5, 20),
+        "end_date": datetime.date(2024, 5, 25),
     },
     {
         "space_id": 5,
-        "start_date": datetime.date(2022, 4, 1),
-        "end_date": datetime.date(2022, 6, 30),
+        "start_date": datetime.date(2024, 4, 1),
+        "end_date": datetime.date(2024, 6, 30),
     },
 ]
 
@@ -100,62 +100,62 @@ availabilities_data = [
 bookings_data = [
     {
         "space_id": 1,
-        "start_date": datetime.date(2022, 1, 29),
-        "end_date": datetime.date(2022, 1, 31),
+        "start_date": datetime.date(2024, 1, 29),
+        "end_date": datetime.date(2024, 1, 31),
         "user_id": 4,
     },
     {
         "space_id": 1,
-        "start_date": datetime.date(2022, 2, 5),
-        "end_date": datetime.date(2022, 2, 8),
+        "start_date": datetime.date(2024, 2, 5),
+        "end_date": datetime.date(2024, 2, 8),
         "user_id": 1,
     },
     {
         "space_id": 1,
-        "start_date": datetime.date(2022, 2, 15),
-        "end_date": datetime.date(2022, 2, 18),
+        "start_date": datetime.date(2024, 2, 15),
+        "end_date": datetime.date(2024, 2, 18),
         "user_id": 2,
     },
     {
         "space_id": 1,
-        "start_date": datetime.date(2022, 2, 25),
-        "end_date": datetime.date(2022, 2, 28),
+        "start_date": datetime.date(2024, 2, 25),
+        "end_date": datetime.date(2024, 2, 28),
         "user_id": 7,
     },
     {
         "space_id": 2,
-        "start_date": datetime.date(2022, 3, 5),
-        "end_date": datetime.date(2022, 3, 8),
+        "start_date": datetime.date(2024, 3, 5),
+        "end_date": datetime.date(2024, 3, 8),
         "user_id": 2,
     },
     {
         "space_id": 2,
-        "start_date": datetime.date(2022, 3, 15),
-        "end_date": datetime.date(2022, 3, 18),
+        "start_date": datetime.date(2024, 3, 15),
+        "end_date": datetime.date(2024, 3, 18),
         "user_id": 3,
     },
     {
         "space_id": 2,
-        "start_date": datetime.date(2022, 3, 25),
-        "end_date": datetime.date(2022, 3, 28),
+        "start_date": datetime.date(2024, 3, 25),
+        "end_date": datetime.date(2024, 3, 28),
         "user_id": 3,
     },
     {
         "space_id": 3,
-        "start_date": datetime.date(2022, 4, 5),
-        "end_date": datetime.date(2022, 4, 8),
+        "start_date": datetime.date(2024, 4, 5),
+        "end_date": datetime.date(2024, 4, 8),
         "user_id": 4,
     },
     {
         "space_id": 3,
-        "start_date": datetime.date(2022, 4, 15),
-        "end_date": datetime.date(2022, 4, 18),
+        "start_date": datetime.date(2024, 4, 15),
+        "end_date": datetime.date(2024, 4, 18),
         "user_id": 6,
     },
     {
         "space_id": 5,
-        "start_date": datetime.date(2022, 4, 25),
-        "end_date": datetime.date(2022, 6, 28),
+        "start_date": datetime.date(2024, 4, 25),
+        "end_date": datetime.date(2024, 6, 28),
         "user_id": 1,
     },
 ]
