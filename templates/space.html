@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{{space.name}}</title>
+        <meta charset="utf-8" />
+        <script src="https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.umd.min.js"></script>
+    </head>
+    <body>
+        <h1>{{space.name}}</h1>
+
+        <div>
+            <p>{{space.description}}</p>
+            <p>£{{space.price}} per night</p>
+        </div>
+
+        <form action="/spaces/{{id}}" method="POST">
+            <input id="datepicker"/>
+            <script>
+                const picker = new easepick.create({
+                    element: "#datepicker",
+                    css: [
+                        "https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css"
+                    ],
+                    zIndex: 10,
+                    grid: 3,
+                    calendars: 6,
+                    inline: true,
+                    RangePlugin: {
+                        locale: {
+                            one: "night",
+                            other: "nights"
+                        }
+                    },
+                    LockPlugin: {
+                        minDate: "2024-01-01T00:00:00.000Z"
+                    },
+                    plugins: [
+                        "RangePlugin",
+                        "LockPlugin"
+                    ]
+                })
+                    </script>
+            <br/>
+            <input type="submit" value="Make Booking">
+        </form>
+
+        
+    </body>
+</html>
+
+
