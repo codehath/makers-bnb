@@ -363,6 +363,12 @@ def make_booking(id):
     return redirect("/dashboard")
 
 
+# Catch-all route to redirect undefined routes to spaces
+@app.route("/<path:undefined_route>")
+def catch_all(undefined_route):
+    return redirect("/")
+
+
 # return render_template("print.html", print=dates)
 
 # These lines start the server if you run this file directly
