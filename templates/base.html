@@ -11,6 +11,9 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}"> 
 
     <title>MakersBnB</title>
+    {% block head %}
+    {% endblock %}
+
   </head>
 
   <body>
@@ -28,7 +31,7 @@
           <li class="nav-item"><a class="nav-link" href="/spaces">Spaces</a></li> 
           <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
 
-          {% if logged_in_user is defined %}
+          {% if user is defined %}
           <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
           {% else %}
           <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>

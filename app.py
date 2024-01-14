@@ -118,7 +118,7 @@ def get_new_space():
     global logged_in_user
     if logged_in_user == None:
         return redirect("/login")
-    return render_template("new-space.html")
+    return render_template("new-space.html", user=logged_in_user)
 
 @app.route("/new-space", methods=["POST"])
 def submit_space():
@@ -141,12 +141,7 @@ def submit_space():
     # Notify the user about the created space
     space_created(logged_in_user, new_space)
 
-    return redirect("/success")
-
-# SUCCESS ROUTE
-@app.route("/success", methods=["GET"])
-def get_success():
-    return render_template("success.html")
+    return render_template("success.html", message="Your space has been listed")
 
 
 # DASHBOARD ROUTE
@@ -182,7 +177,7 @@ def get_dashboard():
             del person_dict['id']
             request.update(person_dict)
 
-    return render_template("dashboard.html", bookings=bookings_dicts, requests=requests)
+    return render_template("dashboard.html", bookings=bookings_dicts, requests=requests, user=logged_in_user)
 
 
 # VIEW BOOKING ROUTE
@@ -207,7 +202,7 @@ def booking(booking_id):
     del person_dict['id']
     request_dict.update(person_dict)
     
-    return render_template("booking.html", request=request_dict)
+    return render_template("booking.html", request=request_dict, user=logged_in_user)
 
 
 # APPROVAL ROUTES
@@ -236,7 +231,7 @@ def approval(booking_id):
     # Send email for booking request
     
     
-    return render_template("approval.html", request=request_dict)
+    return render_template("approval.html", request=request_dict, user=logged_in_user)
 
 #Approving a Booking
 @app.route("/approve/<int:booking_id>", methods=["POST"])
@@ -251,18 +246,15 @@ def approve(booking_id):
         booking.approved = True
         booking.response = True
         booking.save()
-        #Sending an email to the person who booked
-        
-
-        
-#Sending text to the person who booked
+    
     person = Person.select().where(Person.id == booking.user_id ).first()
     space = Space.select().where(Space.id == booking.space_id).first()
+    # Sending text to the person who booked
     requested_text_confirmed(person, space, booking)
+    # Sending an email to the person who booked
     booking_confirmed(person, space, booking)
     
-
-    return render_template("success.html")
+    return render_template("success.html", message="Your booking has been approved", user=logged_in_user)
 
 @app.route("/reject/<int:booking_id>", methods=["POST"])
 def reject(booking_id):
@@ -283,13 +275,16 @@ def reject(booking_id):
         # Send a rejection email to the person who booked
         booking_denied(person, space, booking)
         requested_text_denied(person, space, booking)
-    return render_template("success.html")
+    return render_template("success.html", message="You have successfully rejected the booking", user=logged_in_user)
 
 
 @app.route("/spaces", methods=["GET"])
 def spaces():
+    global logged_in_user
+    # return str(logged_in_user)
+    
     spaces = Space.select()
-    return render_template("spaces.html", spaces=spaces)
+    return render_template("spaces.html", spaces=spaces, user=logged_in_user)
 
 
 @app.route("/spaces", methods=["POST"])
@@ -303,7 +298,7 @@ def spaces_date_range():
             and date_conv(request.form["avail-to"]) >= Availability.end_date
         )
     )
-    return render_template("spaces.html", spaces=spaces)
+    return render_template("spaces.html", spaces=spaces, user=logged_in_user)
 
 
 @app.route("/spaces/<int:id>", methods=["GET"])
@@ -336,7 +331,7 @@ def get_space(id):
             booked_dates.append([str(dates.start_date), str(dates.end_date + timedelta(days=1))])
 
     # return render_template("print.html", print=booked_dates)
-    return render_template("space_cal.html", space=space[0], booked_dates=booked_dates, id=id)
+    return render_template("space_cal.html", space=space[0], booked_dates=booked_dates, id=id, user=logged_in_user)
 
     return render_template("calendar.html", booked_dates=booked_dates)
 
@@ -350,7 +345,7 @@ def make_booking(id):
         end_date=dates[1],
         user_id=user_id)
 
-    return render_template("dashboard.html")
+    return redirect("/dashboard")
 
 
 # return render_template("print.html", print=dates)
