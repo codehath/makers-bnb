@@ -3,14 +3,13 @@ from datetime import datetime, timedelta
 from flask import Flask, request, render_template, redirect
 from twilio.rest import Client
 
-from lib.database_connection import get_flask_database_connection
+# from lib.database_connection import get_flask_database_connection
 
 from creds import *
 from lib.person import *
 from lib.availability import *
 from lib.booking import *
 from lib.space import *
-from lib.send_texts import *
 from lib.send_notifications import *
 
 
