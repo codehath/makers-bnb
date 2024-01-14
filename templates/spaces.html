@@ -1,34 +1,29 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {% block content %}
+<h1>Spaces</h1>
 
-{% block content %}
-    <h1>Spaces</h1>
+{% if user is defined %}
+<a href="/new-space">
+	<button>Make a Listing</button>
+</a>
+<br />
+<br />
+{% endif %}
 
-    {% if user is defined %}
-    <a href="/new-space">
-        <button>Make a Listing</button>
-    </a>
-    <br/>
-    <br/>
-    {% endif %}
-    
-    
+<form method="post" action="/spaces">
+	<label for="avail-from">Available from:</label><br />
+	<input type="date" id="avail-from" name="avail-from" /><br />
+	<label for="avail-to">Available to:</label><br />
+	<input type="date" id="avail-to" name="avail-to" />
+	<input type="submit" value="Search" />
+</form>
 
-    <form method="post" action="/spaces">
-        <label for="avail-from">Available from:</label><br>
-        <input type="date" id="avail-from" name="avail-from"><br>
-        <label for="avail-to">Available to:</label><br>
-        <input type="date" id="avail-to" name="avail-to">
-        <input type="submit" value="Search">
-    </form>
-
-    <ul>
-        {% for space in spaces %}
-        <div>
-            <h2><a href="/spaces/{{space.id}}">{{space.name}}</a></h2>
-            <p>{{space.description}}</p>
-            <p>£{{space.price}} per night</p>
-        </div>
-        {% endfor %}
-    </ul>
+<ul>
+	{% for space in spaces %}
+	<div>
+		<h2><a href="/spaces/{{space.id}}">{{space.name}}</a></h2>
+		<p>{{space.description}}</p>
+		<p>£{{space.price}} per night</p>
+	</div>
+	{% endfor %}
+</ul>
 {% endblock %}
-

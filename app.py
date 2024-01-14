@@ -303,7 +303,7 @@ def spaces_date_range():
 
 @app.route("/spaces/<int:id>", methods=["GET"])
 def get_space(id):
-    space = Space.select().where(id == id)
+    space = Space.select().where(Space.id == id).first()
     availability = Availability.select().where(Availability.space_id == id)
     bookings = Booking.select().where(Booking.space_id == id)
 
@@ -329,9 +329,9 @@ def get_space(id):
             booked_dates.append(str(dates.start_date))
         else:
             booked_dates.append([str(dates.start_date), str(dates.end_date + timedelta(days=1))])
-
-    # return render_template("print.html", print=booked_dates)
-    return render_template("space_cal.html", space=space[0], booked_dates=booked_dates, id=id, user=logged_in_user)
+    
+    # return render_template("print.html", print=id)
+    return render_template("space.html", space=space, booked_dates=booked_dates, id=id, user=logged_in_user)
 
     return render_template("calendar.html", booked_dates=booked_dates)
 

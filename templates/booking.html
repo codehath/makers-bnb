@@ -2,19 +2,20 @@
 <h1>Booking Details</h1>
 {% block content %}
 <body>
-    <article>
-        <h1>{{request.name}}</h1><br/>
-        Start Date: {{request.start_date}} <br/>
-        End Date: {{request.end_date}} <br/>
-        £{{request.price}}/n <br/>
-        Booking ID: {{request.id}} <br/>
-        <br/>
-        Owner Name: {{request.user_name}} <br/>
-        Email: {{request.email}} <br/>
-        Online: {{request.logged_in}} <br/>
-        <form action="/message/{{request.user_id}}" method="post">
-            <button id="message" type="submit">Message</button>
-        </form>
-    </article>
+	<article>
+		<h1>{{request.name}}</h1>
+		<br />
+		Start Date: {{request.start_date}} <br />
+		End Date: {{request.end_date}} <br />
+		£{{request.price}}/n <br />
+		Booking ID: {{request.id}} <br />
+		<br />
+		Owner Name: {{request.user_name}} <br />
+		Email: {{request.email}} <br />
+		Online: {{request.logged_in}} <br />
+		<form action="/message/{{request.user_id}}" method="post">
+			<button id="message" type="submit">Message</button>
+		</form>
+	</article>
 </body>
 {% endblock %}

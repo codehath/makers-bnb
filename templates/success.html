@@ -1,16 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Error</title>
-{% block content %}
-<!-- #add delay and send back to dashboard
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Error</title>
+		{% block content %}
+		<!-- #add delay and send back to dashboard
 #dynamically display a message depending on what has occured.  -->
-<head>
-    <meta http-equiv="refresh" content="3;url={{ url_for('get_dashboard') }}">
-    <title>Success</title><body>
-    <h1>Success</h1>
-    <p>{{ message }}</p>
-</body>
-{% endblock %}
+		<head>
+			<meta
+				http-equiv="refresh"
+				content="3;url={{ url_for('get_dashboard') }}"
+			/>
+			<title>Success</title>
+			<body>
+				<h1>Success</h1>
+				<p>{{ message }}</p>
+			</body>
+			{% endblock %}
+		</head>
+	</head>
+</html>

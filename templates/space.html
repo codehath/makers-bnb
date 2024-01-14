@@ -1,51 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <title>{{space.name}}</title>
-        <meta charset="utf-8" />
-        <script src="https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.umd.min.js"></script>
-    </head>
-    <body>
-        <h1>{{space.name}}</h1>
+{% extends "base.html" %} {% block head %}
+<script src="https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.umd.min.js"></script>
+{% endblock %} {% block content %}
+<h1>{{space.name}}</h1>
 
-        <div>
-            <p>{{space.description}}</p>
-            <p>£{{space.price}} per night</p>
-        </div>
+<div>
+	<p>{{space.description}}</p>
+	<p>£{{space.price}} per night</p>
+</div>
 
-        <form action="/spaces/{{id}}" method="POST">
-            <input id="datepicker"/>
-            <script>
-                const picker = new easepick.create({
-                    element: "#datepicker",
-                    css: [
-                        "https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css"
-                    ],
-                    zIndex: 10,
-                    grid: 3,
-                    calendars: 6,
-                    inline: true,
-                    RangePlugin: {
-                        locale: {
-                            one: "night",
-                            other: "nights"
-                        }
-                    },
-                    LockPlugin: {
-                        minDate: "2024-01-01T00:00:00.000Z"
-                    },
-                    plugins: [
-                        "RangePlugin",
-                        "LockPlugin"
-                    ]
-                })
-                    </script>
-            <br/>
-            <input type="submit" value="Make Booking">
-        </form>
+<form action="/spaces/{{id}}" method="POST">
+	<input id="datepicker" name="datepicker" />
+	<script>
+		const DateTime = easepick.DateTime;
+		// Fix code syntax
+		var booked_dates = {{ booked_dates | tojson | safe }};
+		const bookedDates = booked_dates.map(d => {
+			if (d instanceof Array) {
+				const start = new DateTime(d[0], 'YYYY-MM-DD');
+				const end = new DateTime(d[1], 'YYYY-MM-DD');
 
-        
-    </body>
-</html>
+				return [start, end];
+			}
 
+			return new DateTime(d, 'YYYY-MM-DD');
+		});
+		const picker = new easepick.create({
+		element: document.getElementById('datepicker'),
+		css: [
+			'https://cdn.jsdelivr.net/npm/@easepick/bundle@1.2.1/dist/index.css',
+			'https://easepick.com/css/demo_hotelcal.css',
+		],
+		grid: 3,
+		calendars: 6,
+		inline: true,
+		plugins: ['RangePlugin', 'LockPlugin'],
+		RangePlugin: {
+			tooltipNumber(num) {
+				return num - 1;
+			},
+			locale: {
+				one: 'night',
+				other: 'nights',
+			},
+		},
+		LockPlugin: {
+			minDate: new Date(),
+			minDays: 1,
+			inseparable: true,
+			filter(date, picked) {
+				if (picked.length === 1) {
+				const incl = date.isBefore(picked[0]) ? '[)' : '(]';
+				return !picked[0].isSame(date, 'day') && date.inArray(bookedDates, incl);
+				}
 
+				return date.inArray(bookedDates, '[)');
+			},
+		}
+		});
+	</script>
+
+	<br />
+	<input type="submit" value="Make Booking" />
+</form>
+{% endblock %}

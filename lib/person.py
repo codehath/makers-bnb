@@ -9,11 +9,8 @@ class Person(Model):
     name = CharField()
     email = CharField()
     password = CharField()
-    number = CharField(max_length=11)
+    number = CharField(max_length=11, default=test_number)
     logged_in = BooleanField(default=False)
 
     class Meta:
         database = db  # This model uses the "people.db" database.
-    
-   
-

@@ -24,13 +24,13 @@ db.create_tables([Person, Space, Booking, Availability])
 
 # Seed data for person table
 persons_data = [
-    {"name": "John Doe", "email": "john@example.com", "password": "password", "number": "00000000000"},
-    {"name": "Bruce Wayne", "email": "bruce@example.com", "password": "password", "number": "00000000000"},
-    {"name": "Jane Doe", "email": "jane@example.com", "password": "password123", "number": "00000000000"},
-    {"name": "Alice Smith", "email": "alice@example.com", "password": "secret", "number": "00000000000"},
-    {"name": "Bob Johnson", "email": "bob@example.com", "password": "pass123", "number": "00000000000"},
-    {"name": "Eve Wilson", "email": "eve@example.com", "password": "securepass", "number": "00000000000"},
-    {"name": "Charlie Brown", "email": "charlie@example.com", "password": "mysecret", "number": "00000000000"},
+    {"name": "John Doe", "email": "john@example.com", "password": "password"},
+    {"name": "Bruce Wayne", "email": "bruce@example.com", "password": "password"},
+    {"name": "Jane Doe", "email": "jane@example.com", "password": "password123"},
+    {"name": "Alice Smith", "email": "alice@example.com", "password": "secret"},
+    {"name": "Bob Johnson", "email": "bob@example.com", "password": "pass123"},
+    {"name": "Eve Wilson", "email": "eve@example.com", "password": "securepass"},
+    {"name": "Charlie Brown", "email": "charlie@example.com", "password": "mysecret"},
 ]
 
 # Seed data for spaces
@@ -108,7 +108,7 @@ bookings_data = [
         "space_id": 1,
         "start_date": datetime.date(2024, 2, 5),
         "end_date": datetime.date(2024, 2, 8),
-        "user_id": 1,
+        "user_id": 2,
     },
     {
         "space_id": 1,
@@ -126,7 +126,7 @@ bookings_data = [
         "space_id": 2,
         "start_date": datetime.date(2024, 3, 5),
         "end_date": datetime.date(2024, 3, 8),
-        "user_id": 2,
+        "user_id": 1,
     },
     {
         "space_id": 2,
@@ -156,7 +156,7 @@ bookings_data = [
         "space_id": 5,
         "start_date": datetime.date(2024, 4, 25),
         "end_date": datetime.date(2024, 6, 28),
-        "user_id": 1,
+        "user_id": 2,
     },
 ]
 
