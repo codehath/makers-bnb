@@ -4,20 +4,19 @@
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Error</title>
-		{% block content %}
-		<!-- #add delay and send back to dashboard
-#dynamically display a message depending on what has occured.  -->
+
 		<head>
+			<!-- Redirect back to Login after 2 seconds -->
 			<meta
 				http-equiv="refresh"
-				content="3;url={{ url_for('get_dashboard') }}"
+				content="2;url={{ url_for('get_dashboard') }}"
 			/>
 			<title>Success</title>
-			<body>
-				<h1>Success</h1>
-				<p>{{ message }}</p>
-			</body>
-			{% endblock %}
 		</head>
+
+		<body>
+			<h1>Success</h1>
+			<p>{{ message }}</p>
+		</body>
 	</head>
 </html>

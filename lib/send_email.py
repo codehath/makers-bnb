@@ -59,6 +59,7 @@ def approve_request(person, space, booking):
     send_email(person.email, subject, body)
 
 
+# Guest Emails
 def request_to_book(person, space, booking):
     subject = "Booking Request Received"
     body = f"Thank you for requesting to book {space.name} {date_message(booking)}. The host will review your request shortly."
