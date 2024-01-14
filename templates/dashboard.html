@@ -2,44 +2,48 @@
 <h1>Dashboard</h1>
 
 {% block content %}
-<a href="{{ url_for ('get_new_space') }}">
-	<button>List a New Space</button>
-</a>
-<br />
-
-<article id="requests_made">
-	<h2>My Booking Requests:</h2>
-
-	{% for booking in bookings %}
-	<a href="{{ url_for('booking', booking_id=booking.id) }}">
-		<button>
-			{{booking.name}} <br />
-			Start Date {{booking.start_date}} <br />
-			End Date: {{booking.end_date}} <br />
-			Approved: {{booking.approved}} <br />
-		</button>
+<div style="text-align: right; margin-bottom: 20px">
+	<a href="{{ url_for ('get_new_space') }}">
+		<button>List a New Space</button>
 	</a>
-	<hr />
-	{% endfor %}
-</article>
+</div>
 
-<article id="requests_recieved">
-	<h2>Requests I have recieved:</h2>
+<div style="display: flex; justify-content: space-around">
+	<div style="flex: 1; margin-right: 20px">
+		<article id="requests_made">
+			<h2>My Booking Requests:</h2>
 
-	{% for request in requests %}
-	<a href="{{url_for('approval' , booking_id=request.id) }}">
-		<button>
-			<p>
-				{{request.space_id.name}} <br />
-				Start Date: {{request.start_date}} <br />
-				End Date: {{request.end_date}} <br />
-				£{{request.space_id.price}}/n <br />
-				Booking ID: {{request.id}}
-			</p>
-		</button>
-	</a>
-	<hr />
+			{% for booking in bookings %}
+			<a href="{{ url_for('booking', booking_id=booking.id) }}">
+				<button>
+					{{booking.name}} <br />
+					Start Date {{booking.start_date}} <br />
+					End Date: {{booking.end_date}} <br />
+					Approved: {{booking.approved}} <br />
+				</button>
+			</a>
+			<hr />
+			{% endfor %}
+		</article>
+	</div>
 
-	{% endfor %}
-</article>
+	<div style="flex: 1">
+		<article id="requests_received">
+			<h2>Requests I have received:</h2>
+
+			{% for request in requests %}
+			<a href="{{url_for('approval' , booking_id=request.id) }}">
+				<button>
+					{{request.space_id.name}} <br />
+					Start Date: {{request.start_date}} <br />
+					End Date: {{request.end_date}} <br />
+					£{{request.space_id.price}}/n <br />
+					Booking ID: {{request.id}}
+				</button>
+			</a>
+			<hr />
+			{% endfor %}
+		</article>
+	</div>
+</div>
 {% endblock %}

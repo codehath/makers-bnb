@@ -11,7 +11,7 @@ from lib.availability import *
 from lib.booking import *
 from lib.space import *
 from lib.send_texts import *
-from lib.send_email import *
+from lib.send_notifications import *
 
 
 # Create a new Flask app
@@ -49,7 +49,7 @@ def get_index():
 # SIGNUP ROUTES
 @app.route("/signup", methods=["GET"])
 def get_signup():
-    return render_template("signup.html")
+    return render_template("users/new.html")
 
 
 @app.route("/signup", methods=["POST"])
@@ -65,7 +65,8 @@ def post_signup():
         person = Person.create(name=name, email=email, password=password, number=number)
 
     # SEND WELCOME EMAIL FOR SIGNUP
-    signup_email(person)
+    email_notification("signup", person)
+    # signup_email(person)
 
     return redirect("/login")
 
@@ -73,7 +74,7 @@ def post_signup():
 # LOGIN ROUTES
 @app.route("/login", methods=["GET"])
 def get_login():
-    return render_template("login.html")
+    return render_template("users/login.html")
 
 
 @app.route("/login", methods=["POST"])
@@ -84,7 +85,7 @@ def post_login():
     person_registered = Person.select().where(Person.email == email).first()
     if person_registered == None:
         return render_template(
-            "error.html", message="User does not exist, please try again."
+            "/messages/error.html", message="User does not exist, please try again."
         )
     print(f"person registered: {person_registered} ")
     if person_registered and person_registered.password == password:
@@ -99,7 +100,8 @@ def post_login():
         return redirect("/dashboard")
     else:
         return render_template(
-            "error.html", message="Verify your username and password and try again."
+            "/messages/error.html",
+            message="Verify your username and password and try again.",
         )
 
 
@@ -178,11 +180,13 @@ def booking(booking_id):
     del person_dict["id"]
     request_dict.update(person_dict)
 
-    return render_template("booking.html", request=request_dict, user=logged_in_user)
+    return render_template(
+        "/bookings/show.html", request=request_dict, user=logged_in_user
+    )
 
 
 # APPROVAL ROUTES
-@app.route("/approval/<int:booking_id>", methods=["GET"])
+@app.route("/bookings/requests/<int:booking_id>", methods=["GET"])
 def approval(booking_id):
     global logged_in_user
     if logged_in_user == None:
@@ -204,13 +208,15 @@ def approval(booking_id):
     del person_dict["id"]
     request_dict.update(person_dict)
 
-    # Send email for booking request
+    return render_template(
+        "/bookings/requests/show.html",
+        request=request_dict,
+        user=logged_in_user,
+    )
 
-    return render_template("approval.html", request=request_dict, user=logged_in_user)
 
-
-# Approving a Booking
-@app.route("/approve/<int:booking_id>", methods=["POST"])
+# Approve a Booking
+@app.route("/bookings/requests/approve/<int:booking_id>", methods=["POST"])
 def approve(booking_id):
     global logged_in_user
     if logged_in_user == None:
@@ -223,20 +229,22 @@ def approve(booking_id):
         booking.response = True
         booking.save()
 
-    person = Person.select().where(Person.id == booking.user_id).first()
+    guest = Person.select().where(Person.id == booking.user_id).first()
     space = Space.select().where(Space.id == booking.space_id).first()
-    # Sending text to the person who booked
-    requested_text_confirmed(person, space, booking)
-    # Sending an email to the person who booked
-    booking_confirmed(person, space, booking)
+
+    email_notification("request_approved", logged_in_user, space, booking)
+    sms_notification("booking_confirmed", guest, space, booking)
+    email_notification("booking_confirmed", guest, space, booking)
 
     return render_template(
-        "success.html", message="Your booking has been approved", user=logged_in_user
+        "/messages/success.html",
+        message="Your booking has been approved",
+        user=logged_in_user,
     )
 
 
-# Rejecting a Booking
-@app.route("/reject/<int:booking_id>", methods=["POST"])
+# Reject a Booking
+@app.route("/bookings/requests/reject/<int:booking_id>", methods=["POST"])
 def reject(booking_id):
     global logged_in_user
     if logged_in_user == None:
@@ -249,14 +257,14 @@ def reject(booking_id):
         booking.save()
 
         # Fetch additional details (Person and Space)
-        person = Person.select().where(Person.id == booking.user_id).first()
+        guest = Person.select().where(Person.id == booking.user_id).first()
         space = Space.select().where(Space.id == booking.space_id).first()
 
-        # Send a rejection email to the person who booked
-        booking_denied(person, space, booking)
-        requested_text_denied(person, space, booking)
+        email_notification("booking_denied", guest, space, booking)
+        sms_notification("booking_denied", guest, space, booking)
+
     return render_template(
-        "success.html",
+        "/messages/success.html",
         message="You have successfully rejected the booking",
         user=logged_in_user,
     )
@@ -269,7 +277,7 @@ def spaces():
     # return str(logged_in_user)
 
     spaces = Space.select()
-    return render_template("spaces.html", spaces=spaces, user=logged_in_user)
+    return render_template("/spaces/index.html", spaces=spaces, user=logged_in_user)
 
 
 @app.route("/spaces", methods=["POST"])
@@ -283,19 +291,19 @@ def spaces_date_range():
             and date_conv(request.form["avail-to"]) >= Availability.end_date
         )
     )
-    return render_template("spaces.html", spaces=spaces, user=logged_in_user)
+    return render_template("/spaces/index.html", spaces=spaces, user=logged_in_user)
 
 
 # NEW SPACE ROUTES
-@app.route("/new-space", methods=["GET"])
+@app.route("/spaces/new", methods=["GET"])
 def get_new_space():
     global logged_in_user
     if logged_in_user == None:
         return redirect("/login")
-    return render_template("new-space.html", user=logged_in_user)
+    return render_template("/spaces/new.html", user=logged_in_user)
 
 
-@app.route("/new-space", methods=["POST"])
+@app.route("/spaces/new", methods=["POST"])
 def submit_space():
     global logged_in_user
     if logged_in_user == None:
@@ -313,10 +321,12 @@ def submit_space():
         end_date=request.form["end_date"],
         space_id=new_space.id,
     )
-    # Notify the user about the created space
-    space_created(logged_in_user, new_space)
 
-    return render_template("success.html", message="Your space has been listed")
+    email_notification("new_space", logged_in_user, new_space)
+
+    return render_template(
+        "/messages/success.html", message="Your space has been listed"
+    )
 
 
 # SPACE BOOKING ROUTES
@@ -347,7 +357,11 @@ def get_space(id):
 
     # return render_template("print.html", print=id)
     return render_template(
-        "space.html", space=space, booked_dates=booked_dates, id=id, user=logged_in_user
+        "/spaces/show.html",
+        space=space,
+        booked_dates=booked_dates,
+        id=id,
+        user=logged_in_user,
     )
 
     return render_template("calendar.html", booked_dates=booked_dates)
@@ -355,10 +369,16 @@ def get_space(id):
 
 @app.route("/spaces/<int:id>", methods=["POST"])
 def make_booking(id):
-    user_id = 1
-
     dates = request.form["datepicker"].split(" - ")
-    Booking.create(space_id=id, start_date=dates[0], end_date=dates[1], user_id=user_id)
+    booking = Booking.create(
+        space_id=id, start_date=dates[0], end_date=dates[1], user_id=logged_in_user.id
+    )
+
+    space = Space.select().where(Space.id == id).first()
+    host = Person.select().where(Person.id == space.user_id).first()
+    email_notification("new_booking", logged_in_user, space, booking)
+    email_notification("new_request", host, space, booking)
+    sms_notification("request", host, space, booking)
 
     return redirect("/dashboard")
 

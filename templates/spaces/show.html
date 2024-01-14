@@ -60,6 +60,10 @@
 	</script>
 
 	<br />
+	{% if user is defined %}
 	<input type="submit" value="Make Booking" />
+	{% else %}
+	<p>Login to make a booking</p>
+	{% endif %}
 </form>
 {% endblock %}
