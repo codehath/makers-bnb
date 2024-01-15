@@ -1,7 +1,7 @@
 from peewee import *
 from creds import *
-from lib.person import Person
-from lib.space import Space
+from lib.models.person import Person
+from lib.models.space import Space
 
 db = PostgresqlDatabase(db_name, user=user, password=password, host=host)
 

@@ -5,10 +5,10 @@ from flask import Flask, redirect, session, Response
 # from lib.database_connection import get_flask_database_connection
 
 from creds import *
-from lib.person import *
-from lib.availability import *
-from lib.booking import *
-from lib.space import *
+from lib.models.person import *
+from lib.models.availability import *
+from lib.models.booking import *
+from lib.models.space import *
 from lib.send_notifications import *
 
 # Import other controllers

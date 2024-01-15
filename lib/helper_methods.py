@@ -1,6 +1,6 @@
 from flask import redirect, session
 from datetime import datetime
-from lib.person import *
+from lib.models.person import *
 
 
 def get_logged_in_user():

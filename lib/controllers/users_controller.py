@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, request, session
-from lib.person import *
+from lib.models.person import *
 from lib.send_notifications import *
 from lib.helper_methods import *
 

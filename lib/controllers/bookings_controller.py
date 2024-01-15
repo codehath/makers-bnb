@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template, redirect, session, Response
 from datetime import timedelta
-from lib.person import *
-from lib.space import *
-from lib.availability import *
-from lib.booking import *
+from lib.models.person import *
+from lib.models.space import *
+from lib.models.availability import *
+from lib.models.booking import *
 from lib.send_notifications import *
 from lib.helper_methods import *
 
