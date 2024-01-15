@@ -13,12 +13,16 @@ spaces_blueprint = Blueprint("spaces", __name__)
 # SPACES ROUTES
 @spaces_blueprint.route("/", methods=["GET"])
 def spaces():
-    logged_in_user = get_logged_in_user_or_redirect()
-    if isinstance(logged_in_user, Response):
-        return logged_in_user
+    logged_in_user = get_logged_in_user()
+    # return str(logged_in_user)
 
     spaces = Space.select()
-    return render_template("/spaces/index.html", spaces=spaces, user=logged_in_user)
+
+    # return render_template("/spaces/index.html", spaces=spaces, user=logged_in_user)
+    # QUICK FIX - nav bar not changing issue
+    if logged_in_user:
+        return render_template("/spaces/index.html", spaces=spaces, user=logged_in_user)
+    return render_template("/spaces/index.html", spaces=spaces)
 
 
 @spaces_blueprint.route("/", methods=["POST"])
@@ -100,15 +104,25 @@ def get_space(id):
             )
 
     # return render_template("print.html", print=id)
+    # return render_template(
+    #     "/spaces/show.html",
+    #     space=space,
+    #     booked_dates=booked_dates,
+    #     id=id,
+    #     user=logged_in_user,
+    # )
+    # QUICK FIX - nav bar not changing issue
+    if logged_in_user:
+        return render_template(
+            "/spaces/show.html",
+            space=space,
+            booked_dates=booked_dates,
+            id=id,
+            user=logged_in_user,
+        )
     return render_template(
-        "/spaces/show.html",
-        space=space,
-        booked_dates=booked_dates,
-        id=id,
-        user=logged_in_user,
+        "/spaces/show.html", space=space, booked_dates=booked_dates, id=id
     )
-
-    return render_template("calendar.html", booked_dates=booked_dates)
 
 
 @spaces_blueprint.route("/<int:id>", methods=["POST"])
@@ -129,3 +143,6 @@ def make_booking(id):
     sms_notification("request", host, space, booking)
 
     return redirect("/dashboard")
+
+
+# return render_template("print.html", print=dates)
