@@ -63,9 +63,7 @@ def post_signup():
     else:
         person = Person.create(name=name, email=email, password=password, number=number)
 
-    # SEND WELCOME EMAIL FOR SIGNUP
     email_notification("signup", person)
-    # signup_email(person)
 
     return redirect("/login")
 
