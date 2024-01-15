@@ -38,7 +38,10 @@ def spaces_date_range():
             and date_conv(request.form["avail-to"]) >= Availability.end_date
         )
     )
-    return render_template("/spaces/index.html", spaces=spaces, user=logged_in_user)
+    # QUICK FIX - nav bar not changing issue
+    if logged_in_user:
+        return render_template("/spaces/index.html", spaces=spaces, user=logged_in_user)
+    return render_template("/spaces/index.html", spaces=spaces)
 
 
 # NEW SPACE ROUTES

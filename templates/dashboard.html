@@ -1,47 +1,82 @@
-{% extends "base.html" %}
-<h1>Dashboard</h1>
-
-{% block content %}
+{% extends "base.html" %}{% block content %}
 <div style="text-align: right; margin-bottom: 20px">
 	<a href="{{ url_for ('spaces.get_new_space') }}">
 		<button>List a New Space</button>
 	</a>
 </div>
 
-<div style="display: flex; justify-content: space-around">
-	<div style="flex: 1; margin-right: 20px">
-		<article id="requests_made">
+<div class="dashboard-container">
+	<div class="dashboard-section">
+		<article class="dashboard-button" id="requests_made">
 			<h2>My Booking Requests:</h2>
-
+			<hr />
 			{% for booking in bookings %}
-			<a href="{{ url_for('bookings.booking', booking_id=booking.id) }}">
-				<!-- <a href="/bookings/{{booking.id}}"></a> -->
-				<button>
+			<div>
+				<p>
 					{{booking.name}} <br />
-					Start Date {{booking.start_date}} <br />
-					End Date: {{booking.end_date}} <br />
+					Check In {{booking.start_date}} <br />
+					Check Out: {{booking.end_date}} <br />
 					Approved: {{booking.approved}} <br />
-				</button>
-			</a>
+				</p>
+				<a
+					href="{{ url_for('bookings.booking', booking_id=booking.id) }}"
+					class="view-button"
+				>
+					<button>View</button>
+				</a>
+			</div>
 			<hr />
 			{% endfor %}
 		</article>
 	</div>
 
-	<div style="flex: 1">
-		<article id="requests_received">
+	<div class="dashboard-section">
+		<article class="dashboard-button" id="requests_received">
 			<h2>Requests I have received:</h2>
-
+			<hr />
 			{% for request in requests %}
-			<a href="{{url_for('bookings.approval' , booking_id=request.id) }}">
-				<button>
-					{{request.space_id.name}} <br />
-					Start Date: {{request.start_date}} <br />
-					End Date: {{request.end_date}} <br />
+			<div>
+				<p>
+					{{request.space_id.name}} - Booking ID: {{request.id}}<br />
+					Check In: {{request.start_date}} <br />
+					Check Out: {{request.end_date}} <br />
 					£{{request.space_id.price}}/n <br />
-					Booking ID: {{request.id}}
-				</button>
-			</a>
+				</p>
+				<div class="button-group">
+					<a
+						href="{{ url_for('bookings.approval', booking_id=request.id) }}"
+						id="view-button"
+					>
+						<button class="button-primary">View</button>
+					</a>
+					<form
+						action="{{ url_for('bookings.approve', booking_id=request.id) }}"
+						method="post"
+					>
+						<button
+							type="submit"
+							id="approve-button"
+							class="button-primary"
+						>
+							Approve
+						</button>
+					</form>
+					<form
+						action="{{ url_for('bookings.reject', booking_id=request.id) }}"
+						id="rejectForm"
+						method="post"
+					>
+						<input type="hidden" name="request.id" value="" />
+						<button
+							type="submit"
+							id="reject-button"
+							class="button-primary"
+						>
+							Reject
+						</button>
+					</form>
+				</div>
+			</div>
 			<hr />
 			{% endfor %}
 		</article>
