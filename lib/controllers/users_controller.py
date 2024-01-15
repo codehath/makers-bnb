@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, redirect, request, session
 from lib.person import *
 from lib.send_notifications import *
+from lib.helper_methods import *
 
 users_blueprint = Blueprint("users", __name__)
 
@@ -64,9 +65,8 @@ def post_login():
 # Log Out
 @users_blueprint.route("/logout", methods=["GET"])
 def get_logout():
-    user_id = session.get("user_id")
-    if user_id:
-        logged_in_user = Person.select().where(Person.id == user_id).first()
+    logged_in_user = get_logged_in_user()
+    if logged_in_user:
         logged_in_user.logged_in = False
         logged_in_user.save()
         session.pop("user_id", None)

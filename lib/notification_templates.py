@@ -1,13 +1,4 @@
-# message = [subject, body]
-
-
-def date_string(booking):
-    # Adjust message if only 1 night
-    date = f"from {booking.start_date} to {booking.end_date}"
-    if booking.start_date == booking.end_date:
-        date = f"on {booking.start_date}"
-
-    return date
+from lib.helper_methods import date_string
 
 
 def signup_email(person):

@@ -1,10 +1,11 @@
-from flask import Blueprint, render_template, redirect, session
+from flask import Blueprint, render_template, redirect, session, Response
 from datetime import timedelta
 from lib.person import *
 from lib.space import *
 from lib.availability import *
 from lib.booking import *
 from lib.send_notifications import *
+from lib.helper_methods import *
 
 bookings_blueprint = Blueprint("bookings", __name__)
 
@@ -12,10 +13,9 @@ bookings_blueprint = Blueprint("bookings", __name__)
 # VIEW BOOKING ROUTE
 @bookings_blueprint.route("/<int:booking_id>", methods=["GET"])
 def booking(booking_id):
-    user_id = session.get("user_id")
-    if user_id == None:
-        return redirect("/login")
-    logged_in_user = Person.select().where(Person.id == user_id).first()
+    logged_in_user = get_logged_in_user_or_redirect()
+    if isinstance(logged_in_user, Response):
+        return logged_in_user
 
     request = Booking.select().join(Space).where(Booking.id == booking_id).first()
     request_dict = request.__dict__["__data__"]
@@ -40,10 +40,9 @@ def booking(booking_id):
 # APPROVAL ROUTES
 @bookings_blueprint.route("/requests/<int:booking_id>", methods=["GET"])
 def approval(booking_id):
-    user_id = session.get("user_id")
-    if user_id == None:
-        return redirect("/login")
-    logged_in_user = Person.select().where(Person.id == user_id).first()
+    logged_in_user = get_logged_in_user_or_redirect()
+    if isinstance(logged_in_user, Response):
+        return logged_in_user
 
     request = Booking.select().join(Space).where(Booking.id == booking_id).first()
     request_dict = request.__dict__["__data__"]
@@ -71,10 +70,9 @@ def approval(booking_id):
 # Approve a Booking
 @bookings_blueprint.route("/requests/approve/<int:booking_id>", methods=["POST"])
 def approve(booking_id):
-    user_id = session.get("user_id")
-    if user_id == None:
-        return redirect("/login")
-    logged_in_user = Person.select().where(Person.id == user_id).first()
+    logged_in_user = get_logged_in_user_or_redirect()
+    if isinstance(logged_in_user, Response):
+        return logged_in_user
 
     booking = Booking.select().where(Booking.id == booking_id).first()
 
@@ -100,10 +98,9 @@ def approve(booking_id):
 # Reject a Booking
 @bookings_blueprint.route("/requests/reject/<int:booking_id>", methods=["POST"])
 def reject(booking_id):
-    user_id = session.get("user_id")
-    if user_id == None:
-        return redirect("/login")
-    logged_in_user = Person.select().where(Person.id == user_id).first()
+    logged_in_user = get_logged_in_user_or_redirect()
+    if isinstance(logged_in_user, Response):
+        return logged_in_user
 
     booking = Booking.select().where(Booking.id == booking_id).first()
 

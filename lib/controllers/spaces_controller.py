@@ -1,29 +1,21 @@
-from flask import Blueprint, render_template, redirect, request, session
+from flask import Blueprint, render_template, redirect, request, session, Response
 from datetime import datetime, timedelta
 from lib.person import *
 from lib.space import *
 from lib.availability import *
 from lib.booking import *
 from lib.send_notifications import *
+from lib.helper_methods import *
 
 spaces_blueprint = Blueprint("spaces", __name__)
-
-
-# Function to convert form date inputs into datetime objects...
-# ...so that they can be compared against table DateFields
-def date_conv(date):
-    return datetime.strptime(date, "%Y-%m-%d")
 
 
 # SPACES ROUTES
 @spaces_blueprint.route("/", methods=["GET"])
 def spaces():
-    user_id = session.get("user_id")
-    if user_id == None:
-        logged_in_user = None
-    else:
-        logged_in_user = Person.select().where(Person.id == user_id).first()
-    # return str(logged_in_user)
+    logged_in_user = get_logged_in_user_or_redirect()
+    if isinstance(logged_in_user, Response):
+        return logged_in_user
 
     spaces = Space.select()
     return render_template("/spaces/index.html", spaces=spaces, user=logged_in_user)
@@ -31,6 +23,8 @@ def spaces():
 
 @spaces_blueprint.route("/", methods=["POST"])
 def spaces_date_range():
+    logged_in_user = get_logged_in_user()
+
     # Join availability table to space table and only select spaces with availability between the dates entered in the form
     spaces = (
         Space.select()
@@ -46,26 +40,23 @@ def spaces_date_range():
 # NEW SPACE ROUTES
 @spaces_blueprint.route("/new", methods=["GET"])
 def get_new_space():
-    user_id = session.get("user_id")
-    if user_id == None:
-        return redirect("/login")
-    logged_in_user = Person.select().where(Person.id == user_id).first()
+    logged_in_user = get_logged_in_user_or_redirect()
+    if isinstance(logged_in_user, Response):
+        return logged_in_user
     return render_template("/spaces/new.html", user=logged_in_user)
 
 
 @spaces_blueprint.route("/new", methods=["POST"])
 def submit_space():
-    user_id = session.get("user_id")
-    if user_id == None:
-        return redirect("/login")
-    logged_in_user = Person.select().where(Person.id == user_id).first()
-    user_id = logged_in_user.id
+    logged_in_user = get_logged_in_user_or_redirect()
+    if isinstance(logged_in_user, Response):
+        return logged_in_user
 
     new_space = Space.create(
         name=request.form["name"],
         description=request.form["description"],
         price=request.form["price"],
-        user_id=user_id,
+        user_id=logged_in_user.id,
     )
     Availability.create(
         start_date=request.form["start_date"],
@@ -83,11 +74,7 @@ def submit_space():
 # SPACE BOOKING ROUTES
 @spaces_blueprint.route("/<int:id>", methods=["GET"])
 def get_space(id):
-    user_id = session.get("user_id")
-    if user_id == None:
-        logged_in_user = None
-    else:
-        logged_in_user = Person.select().where(Person.id == user_id).first()
+    logged_in_user = get_logged_in_user()
 
     space = Space.select().where(Space.id == id).first()
     availability = Availability.select().where(Availability.space_id == id)
@@ -126,6 +113,10 @@ def get_space(id):
 
 @spaces_blueprint.route("/<int:id>", methods=["POST"])
 def make_booking(id):
+    logged_in_user = get_logged_in_user_or_redirect()
+    if isinstance(logged_in_user, Response):
+        return logged_in_user
+
     dates = request.form["datepicker"].split(" - ")
     booking = Booking.create(
         space_id=id, start_date=dates[0], end_date=dates[1], user_id=logged_in_user.id

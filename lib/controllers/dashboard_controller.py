@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, session
+from flask import Blueprint, render_template, redirect, session, Response
 from lib.person import *
 from lib.space import *
 from lib.booking import *
@@ -11,10 +11,10 @@ dashboard_blueprint = Blueprint("dashboard", __name__)
 # Dashboard
 @dashboard_blueprint.route("/", methods=["GET"])
 def get_dashboard():
-    user_id = session.get("user_id")
-    if user_id == None:
-        return redirect("/login")
-    logged_in_user = Person.select().where(Person.id == user_id).first()
+    logged_in_user = get_logged_in_user_or_redirect()
+    if isinstance(logged_in_user, Response):
+        return logged_in_user
+    user_id = logged_in_user.id
 
     # Creates a list of dictionaries for bookings with booking details
     bookings = Booking.select().where(Booking.user_id == user_id)
