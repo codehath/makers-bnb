@@ -116,11 +116,16 @@ def get_space(id):
             "/spaces/show.html",
             space=space,
             booked_dates=booked_dates,
+            avail_dates=avail_dates,
             id=id,
             user=logged_in_user,
         )
     return render_template(
-        "/spaces/show.html", space=space, booked_dates=booked_dates, id=id
+        "/spaces/show.html",
+        space=space,
+        booked_dates=booked_dates,
+        avail_dates=avail_dates,
+        id=id,
     )
 
 

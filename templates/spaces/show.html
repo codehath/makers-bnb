@@ -13,6 +13,18 @@
 	<script>
 		const DateTime = easepick.DateTime;
 		// Fix code syntax
+		var avail_dates = {{ avail_dates | tojson | safe }};
+		const availDates = avail_dates.map(d => {
+			if (d instanceof Array) {
+				const start = new DateTime(d[0], 'YYYY-MM-DD');
+				const end = new DateTime(d[1], 'YYYY-MM-DD');
+
+				return [start, end];
+			}
+
+			return new DateTime(d, 'YYYY-MM-DD');
+		});
+
 		var booked_dates = {{ booked_dates | tojson | safe }};
 		const bookedDates = booked_dates.map(d => {
 			if (d instanceof Array) {
@@ -52,7 +64,7 @@
 				return !picked[0].isSame(date, 'day') && date.inArray(bookedDates, '[]');
 				}
 
-				return date.inArray(bookedDates, '[]');
+				return date.inArray(bookedDates, '[]') || !date.inArray(availDates, '[]');
 			},
 		}
 		});
