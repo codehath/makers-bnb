@@ -1,3 +1,64 @@
-body {
-    font-size: 18px;
+.form-container {
+	display: flex;
+	align-items: baseline;
+}
+
+.form-label {
+	margin-right: 10px;
+}
+
+.space-container {
+	border: 1px solid #ddd; /* Add any other styling you want for the border */
+	border-radius: 10px; /* Adjust the border-radius as needed for the desired level of rounding */
+	padding: 10px; /* Add padding for spacing between the border and content */
+	margin-bottom: 15px; /* Add margin between each space container */
+}
+
+/* static/css/dashboard.css */
+.dashboard-container {
+	display: flex;
+	justify-content: space-around;
+}
+
+.dashboard-section {
+	flex: 1;
+	margin-right: 20px;
+}
+
+.dashboard-button {
+	text-align: center;
+}
+
+.dashboard-button button {
+	/* Your button styles go here */
+}
+
+.dashboard-button hr {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+/* Add this to your CSS file or in a style block in the HTML head */
+.button-group {
+	display: flex;
+	justify-content: center; /* Center the buttons horizontally */
+	gap: 10px; /* Adjust this value to add spacing between buttons */
+}
+
+/* Additional styling for buttons if needed */
+.button-primary {
+	display: inline-block;
+	padding: 2px 20px;
+	font-size: 16px;
+	text-align: center;
+	text-decoration: none;
+	cursor: pointer;
+	border: none;
+	border-radius: 5px;
+	color: #000000;
+	background-color: #c0c0c0; /* Change the color as needed */
+}
+
+.button-primary:hover {
+	background-color: #0056b3; /* Change the hover color as needed */
 }

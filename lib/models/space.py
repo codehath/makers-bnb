@@ -1,6 +1,6 @@
 from peewee import *
 from creds import *
-from lib.person import Person
+from lib.models.person import Person
 
 db = PostgresqlDatabase(db_name, user=user, password=password, host=host)
 

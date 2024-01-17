@@ -1,7 +1,7 @@
 from peewee import *
 from creds import *
-from lib.space import Space
-from lib.booking import *
+from lib.models.space import Space
+from lib.models.booking import *
 
 db = PostgresqlDatabase(db_name, user=user, password=password, host=host)
 
@@ -13,4 +13,4 @@ class Availability(Model):
     space_id = ForeignKeyField(Space)
 
     class Meta:
-        database = db  # This model uses the "people.db" database.
+        database = db

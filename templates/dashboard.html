@@ -1,45 +1,85 @@
-{% extends "base.html" %}
-<h1>Dashboard</h1>
-
-{% block content %}
-<a href="{{ url_for ('get_new_space') }}">
-	<button>List a New Space</button>
-</a>
-<br />
-
-<article id="requests_made">
-	<h2>My Booking Requests:</h2>
-
-	{% for booking in bookings %}
-	<a href="{{ url_for('booking', booking_id=booking.id) }}">
-		<button>
-			{{booking.name}} <br />
-			Start Date {{booking.start_date}} <br />
-			End Date: {{booking.end_date}} <br />
-			Approved: {{booking.approved}} <br />
-		</button>
+{% extends "base.html" %}{% block content %}
+<div style="text-align: right; margin-bottom: 20px">
+	<a href="{{ url_for ('spaces.get_new_space') }}">
+		<button>List a New Space</button>
 	</a>
-	<hr />
-	{% endfor %}
-</article>
+</div>
 
-<article id="requests_recieved">
-	<h2>Requests I have recieved:</h2>
+<div class="dashboard-container">
+	<div class="dashboard-section">
+		<article class="dashboard-button" id="requests_made">
+			<h2>My Bookings:</h2>
+			<hr />
+			{% for booking in bookings %}
+			<div>
+				<p>
+					{{booking.name}} <br />
+					Check In: {{booking.start_date}} <br />
+					Check Out: {{booking.end_date}} <br />
+					Approved: {{booking.approved}} <br />
+				</p>
+				<a
+					href="{{ url_for('bookings.booking', booking_id=booking.id) }}"
+					class="view-button"
+				>
+					<button>View</button>
+				</a>
+			</div>
+			<hr />
+			{% endfor %}
+		</article>
+	</div>
 
-	{% for request in requests %}
-	<a href="{{url_for('approval' , booking_id=request.id) }}">
-		<button>
-			<p>
-				{{request.space_id.name}} <br />
-				Start Date: {{request.start_date}} <br />
-				End Date: {{request.end_date}} <br />
-				£{{request.space_id.price}}/n <br />
-				Booking ID: {{request.id}}
-			</p>
-		</button>
-	</a>
-	<hr />
-
-	{% endfor %}
-</article>
+	<div class="dashboard-section">
+		<article class="dashboard-button" id="requests_received">
+			<h2>Requests Recieved:</h2>
+			<hr />
+			{% for request in requests %}
+			<div>
+				<p>
+					{{request.space_id.name}} - Booking ID: {{request.id}}<br />
+					Check In: {{request.start_date}} <br />
+					Check Out: {{request.end_date}} <br />
+					£{{request.space_id.price}}/n <br />
+				</p>
+				<div class="button-group">
+					<a
+						href="{{ url_for('bookings.approval', booking_id=request.id) }}"
+						id="view-button"
+					>
+						<button class="button-primary">View</button>
+					</a>
+					<form
+						action="{{ url_for('bookings.approve', booking_id=request.id) }}"
+						method="post"
+					>
+						<button
+							type="submit"
+							id="approve-button"
+							class="button-primary"
+						>
+							Approve
+						</button>
+					</form>
+					<form
+						action="{{ url_for('bookings.reject', booking_id=request.id) }}"
+						id="rejectForm"
+						method="post"
+					>
+						<input type="hidden" name="request.id" value="" />
+						<button
+							type="submit"
+							id="reject-button"
+							class="button-primary"
+						>
+							Reject
+						</button>
+					</form>
+				</div>
+			</div>
+			<hr />
+			{% endfor %}
+		</article>
+	</div>
+</div>
 {% endblock %}

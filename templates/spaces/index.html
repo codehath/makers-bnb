@@ -2,25 +2,27 @@
 <h1>Spaces</h1>
 
 {% if user is defined %}
-<a href="/new-space">
+<a href="/spaces/new">
 	<button>Make a Listing</button>
 </a>
 <br />
 <br />
 {% endif %}
 
-<form method="post" action="/spaces">
-	<label for="avail-from">Available from:</label><br />
-	<input type="date" id="avail-from" name="avail-from" /><br />
-	<label for="avail-to">Available to:</label><br />
-	<input type="date" id="avail-to" name="avail-to" /><br />
+<form method="post" action="/spaces" class="form-container">
+	<label for="avail-from" class="form-label">Available from:</label>
+	<input type="date" id="avail-from" name="avail-from" class="form-label" />
+
+	<label for="avail-to" class="form-label">Available to:</label>
+	<input type="date" id="avail-to" name="avail-to" class="form-label" />
+
 	<input type="submit" value="Search" />
 </form>
 
 <br />
 <ul>
 	{% for space in spaces %}
-	<div>
+	<div class="space-container">
 		<h2><a href="/spaces/{{space.id}}">{{space.name}}</a></h2>
 		<p>{{space.description}}</p>
 		<p>£{{space.price}} per night</p>
