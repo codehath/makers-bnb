@@ -93,18 +93,14 @@ def get_space(id):
         if dates.start_date == dates.end_date:
             avail_dates.append(str(dates.start_date))
         else:
-            avail_dates.append(
-                [str(dates.start_date), str(dates.end_date + timedelta(days=1))]
-            )
+            avail_dates.append([str(dates.start_date), str(dates.end_date)])
 
     booked_dates = []
     for dates in bookings:
         if dates.start_date == dates.end_date:
             booked_dates.append(str(dates.start_date))
         else:
-            booked_dates.append(
-                [str(dates.start_date), str(dates.end_date + timedelta(days=1))]
-            )
+            booked_dates.append([str(dates.start_date), str(dates.end_date)])
 
     # return render_template("print.html", print=id)
     # return render_template(

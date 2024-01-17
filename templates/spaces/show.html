@@ -48,11 +48,11 @@
 			inseparable: true,
 			filter(date, picked) {
 				if (picked.length === 1) {
-				const incl = date.isBefore(picked[0]) ? '[)' : '(]';
-				return !picked[0].isSame(date, 'day') && date.inArray(bookedDates, incl);
+				// const incl = date.isBefore(picked[0]) ? '[)' : '(]';
+				return !picked[0].isSame(date, 'day') && date.inArray(bookedDates, '[]');
 				}
 
-				return date.inArray(bookedDates, '[)');
+				return date.inArray(bookedDates, '[]');
 			},
 		}
 		});
