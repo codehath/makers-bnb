@@ -44,7 +44,6 @@ def post_login():
         return render_template(
             "/messages/error.html", message="User does not exist, please try again."
         )
-    print(f"person registered: {person_registered} ")
     if person_registered and person_registered.password == password:
         # Update Table - Reset all users logged_in values to False
         # reset = Person.update(logged_in=False)
